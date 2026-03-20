@@ -1,0 +1,10 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace # 自動で空白を削除
+    -   id: end-of-file-fixer # 自動で改行を追加
+    -   id: check-yaml # 自動でyamlを整形
+    -   id: check-added-large-files # 自動で大きいファイルを削除

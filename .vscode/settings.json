@@ -1,0 +1,56 @@
+{
+  // 保存「前」に 1) フォーマット → 2) 段落番号 の順で実行（Run on Save: pucelle）
+  "runOnSave.commands": [
+    {
+      "globMatch": "**/*.md",
+      "commandBeforeSaving": "editor.action.formatDocument",
+      "runIn": "vscode",
+      "async": false
+    },
+    {
+      "globMatch": "**/*.md",
+      "commandBeforeSaving": "markdown.extension.toc.addSecNumbers",
+      "runIn": "vscode",
+      "async": false
+    }
+  ],
+  "runOnSave.defaultRunIn": "vscode",
+
+  "markdown.extension.toc.updateOnSave": true,
+
+  // マークダウンの設定
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": "explicit"
+    },
+    "editor.quickSuggestions": {
+        "comments": "on",
+        "strings": "on",
+        "other": "on"
+    },
+    "editor.snippetSuggestions": "top"
+  },
+
+  // 画像の保存先をプロジェクトルートの images フォルダに固定
+  "pasteImage.path": "${projectRoot}/images",
+  "pasteImage.showFilePathConfirmInputBox": true,
+
+  "markdown.copyFiles.destination": {
+    "**/*": "${documentWorkspaceFolder}/images/"
+  },
+
+  // Pythonの設定
+  // 2026年現在はRuffが一強
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff", // Ruffを使う場合
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "always",
+      "source.organizeImports.ruff": "always"
+    }
+  }
+
+}
