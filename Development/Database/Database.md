@@ -31,7 +31,19 @@
 | トランザクション | 完全対応（REPEATABLE READなど）  | 一部制限（REPEATABLE READ非準拠） | 基本的に非対応         | 完全対応             | 完全対応              |
 | 外部拡張         | PostGIS, TimescaleDB など多数    | 少なめ                            | なし                   | 独自機能多数         | BI連携強め            |
 
-## 4. 参考
+## 4. カーディナリティ
+
+男女のカラムは低カーディナリティ
+高カーディナリティ＝インデックス有効、低カーディナリティ＝インデックス不要
+
+- b-tree
+  - 2分探索のようにして、掘り下げていく
+  - 親ノードの左には親ノードより小さい値、右には親ノードより大きい値をまとめる
+  - 新たに追加する際に子ノードが埋まっていれば、
+
+[B-Tree インデックスの基礎](https://zenn.dev/farstep/books/learn-database-index-basics/viewer/basics-of-b-tree-index)
+
+## 5. 参考
 
 - [データベースのスキーマとは？どのように設計しますか？](https://apidog.com/jp/blog/database-schema-definition-designing/)
 - [Pythonで実装して理解する RDBパフォーマンスチューニング入門 ─ フルスキャンとB-treeインデックスの仕組み](https://qiita.com/take-yoda/private/ecc6e9b174b2e5e97406)
