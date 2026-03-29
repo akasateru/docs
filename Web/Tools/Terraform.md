@@ -1,24 +1,21 @@
+## 1. Terraform
 
-- terraform init -backend=false
-  - terraform init は S3 や Google Cloud Storage などの「保存先（Backend）」に接続して初期化を行いますが、-backend=false をつけると挙動が変わる
+Terraformは、クラウド上のリソースを管理するためのIaCツール。
+
+## 2. インストール方法
+
+## 3. コマンド一覧
+
+terraform fmt -check -recursive
 
 - terraform validate
 
 - dynamic
 
 - for_each
+### 3.1. 初期化・準備
 
-## 1. terraform コマンド
-
-### 1.1. インストール方法
-
-### 1.2. コマンド一覧
-
-terraform fmt -check -recursive
-
-### 1.3. 初期化・準備
-
-プロジェクトを開始する際や、構成を変更した直後に実行します。
+プロジェクトを開始する際や、構成を変更した直後に実行。
 
 | コマンド                            | 説明                                                                                           |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -26,7 +23,7 @@ terraform fmt -check -recursive
 | **`terraform init -backend=false`** | **【重要】** バックエンド（GCS等）に接続せず、プラグインのロードと構文チェックの準備のみ行う。 |
 | **`terraform get -update`**         | 外部モジュールの最新版をダウンロード（更新）する。                                             |
 
-### 1.4. 2\. 検証・整形
+### 3.2. 2\. 検証・整形
 
 コードを綺麗に保ち、デプロイ前にミスを見つけるためのコマンドです。**CI/CD や PR 出し前には必須**です。
 
@@ -36,7 +33,7 @@ terraform fmt -check -recursive
 | **`terraform fmt`**        | コードのインデントや整形を Terraform 推奨スタイルに自動修正する。 |
 | **`terraform fmt -check`** | 整形が必要なファイルがあるか確認のみ行う（CIでよく使う）。        |
 
-### 1.5. 計画・実行
+### 3.3. 計画・実行
 
 実際のクラウド環境に変更を加えるためのメインコマンドです。
 
@@ -48,7 +45,7 @@ terraform fmt -check -recursive
 | **`terraform apply "tfplan"`**   | 事前に作成した `plan` ファイルを元に実行する（安全）。                   |
 | **`terraform destroy`**          | **【危険】** 定義されているすべてのリソースを削除する。                  |
 
-### 1.6. 状態管理（State 操作）
+### 3.4. 状態管理（State 操作）
 
 「コードと実環境の紐付け」が狂ったときに使う、少し高度なコマンドです。
 
@@ -59,7 +56,7 @@ terraform fmt -check -recursive
 | **`terraform refresh`**                | クラウド上の最新状態を読み込み、State ファイルを更新する。 |
 | **`terraform import [アドレス] [ID]`** | 手動で作った既存リソースを Terraform の管理下に置く。      |
 
-### 1.7. 5\. デバッグ・その他
+### 3.5. 5\. デバッグ・その他
 
 困ったときや情報を抽出したいときに使います。
 
@@ -69,7 +66,7 @@ terraform fmt -check -recursive
 | **`terraform console`**   | 変数や関数の挙動をリアルタイムで試せる対話型シェル。 |
 | **`terraform providers`** | 使用しているプロバイダーの依存関係を表示する。       |
 
-### 1.8. おすすめの作業フロー（PR作成時）
+### 3.6. おすすめの作業フロー（PR作成時）
 
 今回の「数珠つなぎ PR」の整理中であれば、以下の順で叩いておくと安心です。
 

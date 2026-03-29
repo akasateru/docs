@@ -34,3 +34,13 @@ GROUP BY
 特定の列でデータをグループ化し、そのグループに対して集計や演算を行うために使用
 
 pg_stat_user_tables
+
+| コマンド  | 意味                                                                  | 例文                      |
+| --------- | --------------------------------------------------------------------- | ------------------------- |
+| BEGIN     | トランザクションを開始                                                | BEGIN;                    |
+| COMMIT    | トランザクションを終了し、変更を確定                                  | COMMIT;                   |
+| ROLLBACK  | トランザクションを終了し、変更を取り消し                              | ROLLBACK;                 |
+| SAVEPOINT | トランザクション内の特定の位置まで戻れるセーブポイントを登録          | SAVEPOINT temp_savepoint; |
+| TRUNCATE  | テーブルのデータを高速に削除（ロールバック不可）             TRUNCATE | TRUNCATE TABLE book;      |
+
+[SQL文法【上級編 - トランザクション処理】](https://zenn.dev/umi_mori/books/331c0c9ef9e5f0/viewer/aba691)
