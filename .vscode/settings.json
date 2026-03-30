@@ -42,15 +42,17 @@
     "**/*": "${documentWorkspaceFolder}/images/"
   },
 
-  // Pythonの設定
-  // 2026年現在はRuffが一強
-  "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff", // Ruffを使う場合
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.ruff": "always",
-      "source.organizeImports.ruff": "always"
-    }
-  }
+  // Marpの設定
+  "markdown.marp.html": "all",     // HTML要素を使えるようにする
+  "markdown.marp.outline": true,   // アウトライン表示を有効にする
 
+  // MPEの設定（内蔵のMarp機能を有効化）
+  "markdown-preview-enhanced.previewConfig.enableMarp": true,
+  "markdown-preview-enhanced.hideDefaultVSCodeMarkdownPreviewButtons": false,
+
+  // Pythonの設定
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.formatOnSave": true
+  }
 }

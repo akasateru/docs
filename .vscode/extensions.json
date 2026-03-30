@@ -1,12 +1,12 @@
 {
   "recommendations": [
     "4ops.terraform", // Terraformを使う場合
-    "codeium.codeium", // Codeiumを使う場合
-    "davidanson.vscode-markdownlint", // markdownlintを使う場合
+    "Codeium.codeium", // Codeiumを使う場合
+    "DavidAnson.vscode-markdownlint", // markdownlintを使う場合
     "docker.docker", // Dockerを使う場合
-    "emeraldwalk.runonsave", // RunOnSaveを使う場合
+    "emeraldwalk.RunOnSave", // RunOnSaveを使う場合
     "esbenp.prettier-vscode", // Prettierを使う場合
-    "grapecity.gc-excelviewer", // Excel Viewerを使う場合
+    "GrapeCity.gc-excelviewer", // Excel Viewerを使う場合
     "janisdd.vscode-edit-csv", // CSVを編集する場合
     "mechatroner.rainbow-csv", // CSVを編集する場合
     "ms-azuretools.vscode-containers", // Dockerを使う場合
@@ -25,7 +25,7 @@
     "pucelle.run-on-save", // RunOnSaveを使う場合
     "redhat.vscode-yaml", // YAMLを編集する場合
     "shd101wyy.markdown-preview-enhanced", // Markdownをプレビューする場合
-    "takumii.markdowntable", // Markdownの表を編集する場合
+    "TakumiI.markdowntable", // Markdownの表を編集する場合
     "usernamehw.errorlens", // エラーを表示する場合
     "yzhang.markdown-all-in-one" // Markdownを編集する場合
   ]
