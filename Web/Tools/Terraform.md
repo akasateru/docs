@@ -153,5 +153,6 @@ resource "aws_db_instance" "example" {
 
 ## 5. 参考
 
+- [GitHub - hashicorp/terraform](https://github.com/hashicorp/terraform)
 - [【Terraform】の基本構文](https://zenn.dev/t_oishi/articles/191bac17622130)
 - [【随時更新】実務でTerraformを使う人は"最低限"抑えておきたい構文をサクッとまとめてみた #AWS - Qiita](https://qiita.com/WebEngrChild/items/e5e3031d93158507cd5d)
