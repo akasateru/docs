@@ -76,3 +76,5 @@ BaseException
 ```
 
 [組み込み例外](https://docs.python.org/ja/3/library/exceptions.html)
+
+## 3. io

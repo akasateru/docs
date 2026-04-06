@@ -44,3 +44,5 @@ pg_stat_user_tables
 | TRUNCATE  | テーブルのデータを高速に削除（ロールバック不可）             TRUNCATE | TRUNCATE TABLE book;      |
 
 [SQL文法【上級編 - トランザクション処理】](https://zenn.dev/umi_mori/books/331c0c9ef9e5f0/viewer/aba691)
+
+## 3. psql
