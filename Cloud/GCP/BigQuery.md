@@ -31,6 +31,10 @@ ARRAY_AGG: 行をまとめて配列にする。
 
 - スクリプト・一時関数 (TEMP FUNCTION)
 
-## 3. 参考
+## 3. Python
+
+- job_config = bigquery.QueryJobConfig(query_parameters)
+
+## 4. 参考
 
 - [データ ウェアハウスから自律型データ AI プラットフォームへ](https://cloud.google.com/bigquery?hl=ja#data-science)

@@ -67,7 +67,11 @@
 - **`runIn: "vscode"`** にすると拡張機能のコマンドを実行できる（省略時はシェルコマンド扱い）
 - `markdown.extension.toc.updateOnSave` で目次（TOC）も保存時に更新可能
 
-## 5. 参考
+## 5. 疑問点
+
+- 抽象クラスに定義ジャンプしたとき、自動で本体まで飛ぶようにしたい
+
+## 6. 参考
 
 - [Markdown（マークダウン）をVSCodeの拡張機能とスニペットで効率良く書く](https://qiita.com/waicode/items/1310d3f0aeb24f393b88)
 - [VSCode(VisualStudioCode)の定番機能を一挙解説 #新人プログラマ応援 - Qiita](https://qiita.com/midiambear/items/bc0e137ed77153cb421c#vscode%E3%81%A7%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B)
