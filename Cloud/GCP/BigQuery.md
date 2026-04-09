@@ -35,6 +35,39 @@ ARRAY_AGG: 行をまとめて配列にする。
 
 - job_config = bigquery.QueryJobConfig(query_parameters)
 
-## 4. 参考
+## 4. メモ
+
+### 4.1. INFORMATION_SCHEMA (メタデータの取得)
+
+BigQueryでは `INFORMATION_SCHEMA` ビューをクエリすることで、データセット、テーブル、ジョブなどのメタデータを取得できます。プロジェクト、データセット、またはリージョンレベルで修飾して使用します。
+
+代表的な `INFORMATION_SCHEMA` のビュー（SCHEMATAの仲間たち）:
+
+- **`INFORMATION_SCHEMA.SCHEMATA`**
+  - データセット（スキーマ）のメタデータ。データセットの一覧や作成日時、ロケーションなどを取得。
+- **`INFORMATION_SCHEMA.TABLES`**
+  - テーブルとビューのメタデータ。テーブル一覧、作成日時、タイプ（BASE TABLE, VIEWなど）を取得。
+- **`INFORMATION_SCHEMA.COLUMNS`**
+  - カラム（列）のメタデータ。テーブルが持つカラムのリスト、データ型（DATA_TYPE）などを取得。
+- **`INFORMATION_SCHEMA.VIEWS`**
+  - ビューの定義（DDL）など、ビュー特有のメタデータを取得。
+- **`INFORMATION_SCHEMA.ROUTINES`**
+  - ユーザー定義関数（UDF）やストアドプロシージャのメタデータを取得。
+- **`INFORMATION_SCHEMA.PARTITIONS`**
+  - パーティション分割テーブルのパーティションごとのメタデータ（行数やストレージサイズなど）。
+- **`region-[REGION].INFORMATION_SCHEMA.JOBS`** (例: `region-us.INFORMATION_SCHEMA.JOBS`)
+  - 過去のジョブ（クエリ実行履歴、ロード、エクスポートなど）のメタデータ。実行時間、スキャンしたバイト数、エラーログなどを確認するのに便利。
+- **`INFORMATION_SCHEMA.TABLE_STORAGE`**
+  - テーブルのストレージ使用量（論理バイト数、物理バイト数、アクティブ/長期保存の区分など）に関する情報を取得。コスト分析に有用。
+
+**クエリ例**:
+
+```sql
+-- 特定のデータセット内のテーブル一覧を取得
+SELECT table_name, table_type
+FROM `project_id.dataset_id.INFORMATION_SCHEMA.TABLES`;
+```
+
+## 5. 参考
 
 - [データ ウェアハウスから自律型データ AI プラットフォームへ](https://cloud.google.com/bigquery?hl=ja#data-science)
