@@ -45,6 +45,11 @@
 
 ### 2.5. Remote - WSL
 
+### 2.6. Dev Container
+
+コンテナの中に自分が入って作業するイメージ。
+開発するならDev Container 一択。
+
 ## 3. ショートカット
 
 `Ctrl + Shift + D`: デバッグ
