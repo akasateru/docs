@@ -97,3 +97,7 @@ class Task(BaseModel):
 ## 7. 参考
 
 - <https://zenn.dev/taka256/articles/c7213c359dd2cf>
+
+
+BeforeValidator:
+AnyHttpUrl

@@ -11,7 +11,6 @@
 - しゃべりながら書きながら作業する(言語化の練習)
 - コミュニケーションコストを下げる
 - 通知が来た瞬間にトリアージする
-- キャパオーバーの仕事は
 
 ## 1.3. コミュニケーション
 
@@ -98,3 +97,4 @@
 - [見逃しがちな信用できるエンジニアの特徴](https://qiita.com/470_aaa/items/e015c879fb6cbca604d8)
 - [信頼できるエンジニアの特徴](https://qiita.com/yamamoto_hiroya/items/c5fff3f5989ffa3b499c)
 - [未経験転職をしたエンジニアの信頼貯金｜ALH株式会社](https://note.alhinc.jp/n/nd885dc40c6b4)
+- [「趣味で読む」のと、「仕事で読む」のでは、全く読み方が違う | Tinect株式会社](https://tinect.jp/blog/reading-for-pleasure-and-reading-for-work-are-completely-different-ways-of-reading/)
