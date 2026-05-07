@@ -2,9 +2,15 @@
 
 ### 1.1. 仮想環境
 
-プロジェクトごとにパッケージを分離するための仕組み。
+- プロジェクトごとに独立したPython環境を作成する仕組み
 
-#### 1.1.1. venv（標準）
+#### 1.1.1. できること
+
+- PC環境を汚さない
+- バージョンの切替
+- 配布が楽
+
+#### 1.1.2. venv（標準）
 
 ```bash
 # 作成
@@ -18,7 +24,7 @@ source .venv/bin/activate       # Mac/Linux
 deactivate
 ```
 
-#### 1.1.2. uv（高速・推奨）
+#### 1.1.3. uv（高速・推奨）
 
 Rust 製の高速パッケージ・プロジェクト管理ツール。
 
@@ -40,7 +46,7 @@ uv sync
 uv run python main.py
 ```
 
-#### 1.1.3. pyenv（Pythonバージョン管理）
+#### 1.1.4. pyenv（Pythonバージョン管理）
 
 ```bash
 # インストール可能なバージョン一覧
@@ -53,8 +59,6 @@ pyenv install 3.12.3
 pyenv global 3.12.3     # グローバル
 pyenv local 3.12.3      # カレントディレクトリ配下
 ```
-
----
 
 ### 1.2. pip
 
@@ -69,8 +73,6 @@ pip show requests               # パッケージ情報
 pip freeze > requirements.txt   # 依存関係を書き出し
 pip install -r requirements.txt # requirements.txt からインストール
 ```
-
----
 
 ### 1.3. pyproject.toml（プロジェクト設定）
 
@@ -95,8 +97,6 @@ line-length = 88
 [tool.mypy]
 strict = true
 ```
-
----
 
 ## 2. エラー一覧
 
@@ -173,7 +173,7 @@ BaseException
 
 [組み込み例外](https://docs.python.org/ja/3/library/exceptions.html)
 
-## 3. io
+## 3. In-Out処理
 
 ### 3.1. ファイル読み書き
 
@@ -201,8 +201,6 @@ with open("file.txt", "a", encoding="utf-8") as f:
 | `a`    | 追記                                   |
 | `b`    | バイナリモード（`rb`, `wb` など）      |
 | `x`    | 新規作成（既存ファイルがあるとエラー） |
-
----
 
 ## 4. 基本データ型
 
@@ -254,8 +252,6 @@ evens   = [x for x in range(10) if x % 2 == 0]
 d       = {k: v for k, v in pairs}
 ```
 
----
-
 ## 6. 関数
 
 ```python
@@ -284,8 +280,6 @@ def decorator(func):
 def say_hello():
     print("hello")
 ```
-
----
 
 ## 7. クラス
 
@@ -324,8 +318,6 @@ print(dog.speak())  # Woof!
 | `__lt__`                 | `<`（`functools.total_ordering` と組み合わせると便利） |
 | `__enter__` / `__exit__` | コンテキストマネージャ（`with` 文）                    |
 
----
-
 ## 8. 例外処理
 
 ```python
@@ -346,8 +338,6 @@ class MyError(Exception):
 
 raise MyError("something went wrong")
 ```
-
----
 
 ## 9. ジェネレータ・イテレータ
 
@@ -376,8 +366,6 @@ class Counter:
         return self.current
 ```
 
----
-
 ## 10. 型ヒント
 
 ```python
@@ -394,8 +382,6 @@ items: list[int] = [1, 2, 3]
 mapping: dict[str, int] = {"a": 1}
 pair: tuple[int, str] = (1, "a")
 ```
-
----
 
 ## 11. 非同期処理（async/await）
 
@@ -419,8 +405,6 @@ async def main():
 asyncio.run(main())
 ```
 
----
-
 ## 12. よく使う標準ライブラリ
 
 | モジュール                      | 用途                                   |
@@ -442,8 +426,6 @@ asyncio.run(main())
 | `threading` / `multiprocessing` | 並列処理                               |
 | `asyncio`                       | 非同期 I/O                             |
 
----
-
 ## 13. dataclasses
 
 ```python
@@ -459,8 +441,6 @@ class Point:
 p = Point(1.0, 2.0)
 print(p)  # Point(x=1.0, y=2.0, label='point', tags=[])
 ```
-
----
 
 ## 14. pathlib
 
@@ -480,5 +460,3 @@ p.with_suffix(".md")  # 拡張子変更
 for f in Path(".").glob("**/*.py"):
     print(f)
 ```
-
-Annotated
