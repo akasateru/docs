@@ -47,3 +47,25 @@
 
 - [データベースのスキーマとは？どのように設計しますか？](https://apidog.com/jp/blog/database-schema-definition-designing/)
 - [Pythonで実装して理解する RDBパフォーマンスチューニング入門 ─ フルスキャンとB-treeインデックスの仕組み](https://qiita.com/take-yoda/private/ecc6e9b174b2e5e97406)
+
+## 6. 検索用語とNoSQLの使用例
+
+### 6.1. 検索関連の一般用語かどうか
+
+- **ファジー検索（fuzzy search）**: 業界で定着した一般用語。曖昧一致・部分一致・表記ゆれを許容する検索手法を指す。検索エンジン、DB、IDEのファイルジャンプ機能などで広く使われる。英語でも"fuzzy search"/"fuzzy matching"として定着。
+- **「検索軸」**: BIツールやデータ分析の文脈で「絞り込みの観点・ディメンション」という意味合いで使われることはあるが、業界標準用語というより説明用の比喩表現に近い。
+- **「アイテム軸検索軸」**: 一般的な定着表現ではない。特定の記事・資料内で使われた独自の言い回しである可能性が高く、見かけた場合は文脈（出典）を確認する必要がある。
+
+### 6.2. NoSQL採用例（Twitter）
+
+Twitterはデータの性質によってRDBとNoSQLを使い分けている。
+
+- **RDB（MySQL/PostgreSQLなど）**: ユーザープロフィールなど構造化データ・関係性の管理に使用。
+- **NoSQL（Cassandraなど）**: ツイート本文、タイムライン、ハッシュタグなど大量・高スループットなデータの保存に使用。書き込み性能とスケーラビリティを優先する場面での典型的なNoSQL採用パターン。
+- ハッシュタグは投稿時にインデックス化され、検索・トレンド集計に使われる。
+
+## 7. 参考（NoSQL）
+
+- [What is the software architecture of twitter?](https://www.designgurus.io/answers/detail/what-is-the-software-architecture-of-twitter)
+- [NoSQL vs SQL: Performance with Twitter Data](https://twitterapi.io/articles/nosql-vs-sql-performance-twitter-data)
+- [Storing, preprocessing and analyzing Tweets: Finding the suitable NoSQL system](https://arxiv.org/pdf/2005.01393)
