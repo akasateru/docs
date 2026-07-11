@@ -10,3 +10,7 @@
 #### 1.1.2. Youtube Speed Controler
 
 - Youtubeなどの動画の速度をコントロールできる
+
+#### 1.1.3. Youtube Download
+
+- [Youtube Download](https://addoncrop.com/v27/youtube-downloader/)
