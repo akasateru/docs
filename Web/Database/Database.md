@@ -48,15 +48,7 @@
 - [データベースのスキーマとは？どのように設計しますか？](https://apidog.com/jp/blog/database-schema-definition-designing/)
 - [Pythonで実装して理解する RDBパフォーマンスチューニング入門 ─ フルスキャンとB-treeインデックスの仕組み](https://qiita.com/take-yoda/private/ecc6e9b174b2e5e97406)
 
-## 6. 検索用語とNoSQLの使用例
-
-### 6.1. 検索関連の一般用語かどうか
-
-- **ファジー検索（fuzzy search）**: 業界で定着した一般用語。曖昧一致・部分一致・表記ゆれを許容する検索手法を指す。検索エンジン、DB、IDEのファイルジャンプ機能などで広く使われる。英語でも"fuzzy search"/"fuzzy matching"として定着。
-- **「検索軸」**: BIツールやデータ分析の文脈で「絞り込みの観点・ディメンション」という意味合いで使われることはあるが、業界標準用語というより説明用の比喩表現に近い。
-- **「アイテム軸検索軸」**: 一般的な定着表現ではない。特定の記事・資料内で使われた独自の言い回しである可能性が高く、見かけた場合は文脈（出典）を確認する必要がある。
-
-### 6.2. NoSQL採用例（Twitter）
+## 6. NoSQL採用例（Twitter）
 
 Twitterはデータの性質によってRDBとNoSQLを使い分けている。
 
@@ -69,3 +61,57 @@ Twitterはデータの性質によってRDBとNoSQLを使い分けている。
 - [What is the software architecture of twitter?](https://www.designgurus.io/answers/detail/what-is-the-software-architecture-of-twitter)
 - [NoSQL vs SQL: Performance with Twitter Data](https://twitterapi.io/articles/nosql-vs-sql-performance-twitter-data)
 - [Storing, preprocessing and analyzing Tweets: Finding the suitable NoSQL system](https://arxiv.org/pdf/2005.01393)
+
+## 8. グラフ型データモデル
+
+データを**ノード（頂点）**と**エッジ（辺）**の集合として表現するデータモデル。リレーショナルモデル（テーブル）やドキュメントモデルと並ぶ代表的なデータモデルの一つ。
+
+- **ノード**: エンティティ（人、物、イベントなど）
+- **エッジ**: ノード間の関係。方向性・ラベル・重みを持てる
+- **プロパティグラフ**: ノードにもエッジにも属性（key-value）を持たせられるモデル（Neo4j, Amazon Neptuneなど）
+- **RDFモデル**: 主語-述語-目的語のトリプルで表現するモデル（セマンティックウェブ、知識グラフで使用）
+
+**得意なこと**: 「友達の友達」のような多段の関係をたどるクエリ、経路探索、推薦。リレーショナルDBだと大量のJOINが必要になる処理を、グラフでは隣接関係を辿るだけで高速に処理できる。
+
+**代表用途**: SNSの人間関係、知識グラフ、不正検知（取引ネットワーク）、レコメンデーションシステム
+
+### 8.1. ヘテロジニアスグラフ（Heterogeneous Graph）
+
+**複数の種類のノード・エッジを持つグラフ**のこと。「ヘテロジニアス」＝「異種の」という意味の一般的な形容詞で、グラフ以外の文脈（例: CPU+GPUを組み合わせるヘテロジニアスコンピューティング）でも使われる。
+
+- **ホモジニアスグラフ**（対義語）: ノードもエッジも1種類のみ（例: SNSの「ユーザー-フォロー-ユーザー」だけのグラフ）
+- **ヘテロジニアスグラフ**: 複数タイプが混在する（例: 学術グラフの「著者」「論文」「会議」「トピック」といった複数ノードタイプと、「執筆する」「引用する」「所属する」といった複数エッジタイプ）
+
+知識グラフはほぼ例外なくヘテロジニアスグラフである。近年ではグラフニューラルネットワーク（GNN）の分野でも、ノードタイプごとに異なる重み行列を使う **Heterogeneous GNN**（HAN, R-GCNなど）が発展している。
+
+「ヘテロジニアスなグラフ型データモデル」＝複数種類のエンティティ・関係を持つグラフDB設計、という文脈で語られることが多い（知識グラフ構築、レコメンデーションシステムなど）。
+
+## 9. Apache Cassandra
+
+大量データを複数のコモディティサーバーに分散して扱うために設計された、無料でオープンソースの分散型NoSQLデータベース。もともとFacebookが開発し、後にApacheプロジェクトへ寄贈された。§6の「NoSQL採用例（Twitter）」で触れたCassandraの詳細。
+
+### 9.1. 主な特徴
+
+- **分散型アーキテクチャ**: マスターレス（単一障害点がない）なノード構成。複数のデータセンターにまたがるクラスタを非同期レプリケーションでサポート
+- **CAP定理上の位置づけ**: 「一貫性」より「可用性」と「スケーラビリティ」を優先する設計。書き込みスループットが非常に高い用途に強い
+- **ワイドカラム型データモデル**: 柔軟なスキーマで、疎（スパース）な列を大量に持つデータも効率的に扱える
+- **線形スケーラビリティ**: ノードを追加するだけで読み書きスループットが線形に伸び、サービスを止めずに拡張可能
+- **耐障害性**: データを複数ノードに複製するため、ハードウェア障害があってもデータが失われにくい
+
+### 9.2. 現状のログ（2026-07-12時点）
+
+- 最新の安定版は **Cassandra 5.0.8**（2026年4月リリース）。サポート対象バージョン系列は3つ
+- 5.0系列の主要新機能:
+  - **Storage-Attached Indexes (SAI)**: 効率的なセカンダリインデックス
+  - **Vectorデータ型・検索**: SAI経由の近似最近傍探索（ベクトル検索対応、AI関連ワークロード向け）
+  - **Unified Compaction Strategy (UCS)**: 適応型コンパクション
+  - **Trie Memtables / Trie SSTables**: トライ構造ベースのメモリ/ディスク格納形式
+  - **Dynamic Data Masking**: クエリ時に機密データを選択的にマスキング
+- 5.0.8では6.0から**自動リペア機能（CEP-37）**をバックポート、`cassandra-stress`でのTLS 1.3自動ネゴシエーション対応なども追加
+
+### 9.3. 参考
+
+- [Apache Cassandra - Wikipedia](https://en.wikipedia.org/wiki/Apache_Cassandra)
+- [What Is Cassandra? | IBM](https://www.ibm.com/think/topics/cassandra)
+- [Releases · apache/cassandra](https://github.com/apache/cassandra/releases)
+- [New Features | Apache Cassandra Documentation](https://cassandra.apache.org/doc/latest/cassandra/new/index.html)

@@ -167,3 +167,69 @@ module.exports = {
 ## 1.4. 参考
 
 - [webpackはちゃんと理解しておいたほうがいい（導入時のTips付き） #webpack - Qiita](https://qiita.com/tanimoto-hikari/items/c718476294480330f929)
+
+# 2. DOM（Document Object Model）
+
+DOMは、ブラウザがHTML/XML文書を解析した結果できる**ツリー構造のオブジェクト表現**。JavaScriptはDOMを操作することで、ページの内容・構造・スタイルを動的に変更できる。「HTMLの見た目」と「JavaScriptが触れる中身」を繋ぐインターフェース。
+
+## 2.1. ツリー構造
+
+```html
+<html>
+  <body>
+    <h1>タイトル</h1>
+    <p>本文</p>
+  </body>
+</html>
+```
+
+```text
+document
+ └─ html
+     └─ body
+         ├─ h1 ── テキストノード「タイトル」
+         └─ p  ── テキストノード「本文」
+```
+
+- **要素ノード（Element）**: `<h1>`や`<p>`などのタグ
+- **テキストノード（Text）**: タグの中の文字列
+- **属性（Attribute）**: `class`や`id`など（ノードではなく要素の一部として扱われる）
+
+## 2.2. 主要なAPI
+
+### 2.2.1. 要素を取得する
+
+```js
+document.getElementById("main");
+document.querySelector(".title");
+document.querySelectorAll("p");
+```
+
+### 2.2.2. 要素を作る・変更する
+
+```js
+const el = document.createElement("div");
+el.textContent = "こんにちは";
+el.classList.add("box");
+```
+
+### 2.2.3. ツリーに追加・削除する
+
+```js
+document.body.appendChild(el);
+el.remove();
+```
+
+### 2.2.4. イベントを扱う
+
+```js
+el.addEventListener("click", () => {
+  console.log("クリックされた");
+});
+```
+
+## 2.3. 重要性・関連知識
+
+- Reactなどのフレームワークも最終的にはDOMを操作している（仮想DOMは「実DOMへの書き込みを最小化する」ための仕組み）
+- DOM操作は比較的コストが高い処理なので、頻繁な操作はパフォーマンスに影響する
+- HTML/CSS/JSの学習において「静的なHTML」と「動くWebページ」を繋ぐ核心の概念
