@@ -14,6 +14,7 @@ Kubernetes（K8s）はコンテナ化されたアプリケーションのデプ�
 | Ingress      | 外部からのHTTP(S)トラフィックをServiceにルーティング         |
 | ConfigMap    | 環境変数・設定ファイルなど機密でない設定情報を管理           |
 | Secret       | パスワードやAPIキーなど機密情報を管理                       |
+| Namespace    | クラスタ内をリソースごとに論理的に分割する仕組み             |
 
 ## 1.3. アーキテクチャ
 
@@ -35,6 +36,11 @@ kubectl apply -f deployment.yaml     # マニフェストを適用
 kubectl rollout restart deployment <name>  # ローリング再起動
 ```
 
-## 1.6. 参考
+## 1.6. ローカルでの学習環境
+
+- `minikube` や `kind` を使えばPCの中に軽量なクラスタを立てて試せる。クラウド環境を用意しなくても`kubectl`コマンドの練習ができる。
+- 概念を読むだけだと定着しにくいので、公式チュートリアルのYAML例を実際に手で書き写しながら`kubectl apply`して挙動を確認するとよい。
+
+## 1.7. 参考
 
 - [Kubernetes公式ドキュメント](https://kubernetes.io/ja/docs/home/)
