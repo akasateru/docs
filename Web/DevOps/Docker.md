@@ -96,3 +96,22 @@ Dockerfile → build → Image → run → Container
                                  └─ Network（通信）
 複数コンテナをまとめて管理 → docker-compose.yml → Compose
 ```
+
+## 1.10. Docker Desktop の WSL2 連携アーキテクチャ
+
+Windows + WSL2 環境で「Docker Desktop から見えるコンテナ」と「WSL内のCLIから見えるコンテナ」が同じか、という疑問への整理。
+
+### 1.10.1. daemon はどちらも共通
+
+- Docker Desktop の WSL2 バックエンドでは、daemon（`dockerd`）は `docker-desktop` という隠しWSL2ディストロ（実質的な軽量Linux VM）の中で1つだけ動いている。
+- WSL Integration を有効にした各ディストロ（Ubuntuなど）には `docker` CLI と、`docker-desktop` 内の同じ daemon への接続経路（ソケットのフォワーディング）が仕込まれる。
+- そのため Windows 側でも WSL 側でも `docker ps` の結果は完全に同一（イメージ・ボリュームも共通）。「別々のDockerが同期している」のではなく「実体は1つ」。
+- 昔の Hyper-V バックエンドは別VMだったが、WSL2バックエンド移行でこの構成に統一された。
+- `docker context ls` で接続先contextを確認できる（通常は `desktop-linux` の1つのみ）。
+
+### 1.10.2. WSLのCLIを使うのに Docker Desktop 本体は必要か
+
+- **Docker Desktop連携を使う場合**: GUIウィンドウは閉じてよいが、アプリ自体（バックグラウンドプロセス）は常駐している必要がある。完全終了（Quit）すると `docker-desktop` VMごとdaemonが落ち、WSL側の `docker` コマンドも接続エラーになる。
+- **Docker Desktopを使わない場合**: WSLディストロに Docker Engine を直接インストール（`docker-ce` を apt導入等）すれば、Docker Desktopは不要になり完全に独立する。`sudo service docker start`（またはsystemd）でdaemonを起動。
+  - メリット: Docker Desktopのライセンス（企業利用での有償化）を回避できる。
+  - デメリット: Windows側GUIや複数ディストロ間のシームレスな共有が失われる。
