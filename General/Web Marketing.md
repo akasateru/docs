@@ -62,6 +62,10 @@ flowchart TD
 通常トラッキング：ページ遷移などを記録
 イベントトラッキング：クリックなどユーザーの行動を記録
 
-## 5. 参考
+## 5. 関連
+
+- [パーティデータ戦略](パーティデータ戦略.md)：ゼロ/ファースト/セカンド/サードパーティデータの分類と広告・EC・SaaS領域での活用戦略
+
+## 6. 参考
 
 [https://satori.marketing/marketing-blog/whitepaper/](https://satori.marketing/marketing-blog/whitepaper/)
