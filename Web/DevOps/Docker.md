@@ -28,6 +28,9 @@ Dockerは、アプリケーションを「コンテナ」という軽量で独�
 
 - `docker build -t [イメージ名]:[タグ] .`: Dockerfileからイメージをビルド
 - `docker images`: ローカルにあるイメージ一覧を表示
+- `docker pull [イメージ名]`: レジストリからイメージを取得
+- `docker push [イメージ名]`: レジストリにイメージを送信
+- `docker tag [元イメージ] [新イメージ名]`: イメージにタグ付け
 - `docker rmi [イメージID]`: イメージを削除
 
 ### 1.3.2. コンテナ操作
@@ -37,9 +40,12 @@ Dockerは、アプリケーションを「コンテナ」という軽量で独�
   - `-p [ホストポート]:[コンテナポート]`: ポートフォワーディング
   - `--name [名前]`: コンテナに名前をつける
 - `docker ps`: 実行中のコンテナ一覧を表示 (`-a` で停止中も含む)
+- `docker start` / `docker restart [コンテナID/名]`: 停止中のコンテナを起動・再起動
 - `docker stop [コンテナID/名]`: コンテナを停止
 - `docker rm [コンテナID/名]`: コンテナを削除
 - `docker exec -it [コンテナID/名] bash`: 起動中のコンテナ内でコマンドを実行
+- `docker logs [コンテナID/名]`: コンテナのログを表示 (`-f` でフォロー表示)
+- `docker attach [コンテナID/名]`: コンテナの標準入出力に接続
 
 ## 1.4. Docker Compose
 
@@ -47,6 +53,8 @@ Dockerは、アプリケーションを「コンテナ」という軽量で独�
 
 - `docker compose up -d`: 定義された全サービスをバックグラウンドで起動
 - `docker compose down`: 全サービスを停止・削除
+- `docker compose ps`: サービスの状態を確認
+- `docker compose build`: イメージを再ビルド
 - `docker compose logs -f`: ログを表示
 
 ## 1.5. 脆弱性診断
@@ -64,3 +72,27 @@ Dockerは、アプリケーションを「コンテナ」という軽量で独�
 ### 1.6.2. クリーンアップ
 
 - `docker system prune`: 使用されていないコンテナ、ネットワーク、イメージ（ダングリング）を一括削除
+
+## 1.7. ボリューム・ネットワーク管理
+
+- **ボリューム (Volume)**: コンテナのデータを永続化するための仕組み。コンテナを削除してもデータが残る。
+  - `docker volume ls` / `create` / `rm`: ボリュームの一覧・作成・削除
+  - `docker run -v [ホストパス]:[コンテナパス] [イメージ名]`: ボリュームをマウントしてコンテナを起動
+- **ネットワーク (Network)**: コンテナ間の通信を管理する仕組み。
+  - `docker network ls` / `create` / `rm`: ネットワークの一覧・作成・削除
+  - `docker run --network [ネットワーク名] [イメージ名]`: 指定ネットワークでコンテナを起動
+
+## 1.8. システム管理・情報確認
+
+- `docker system df`: ディスク使用量を確認
+- `docker inspect [コンテナ/イメージID]`: 詳細情報をJSON形式で確認
+- `docker stats`: コンテナのリソース使用状況をリアルタイム表示
+
+## 1.9. 全体像（概念図）
+
+```text
+Dockerfile → build → Image → run → Container
+                                 ├─ Volume（永続化データ）
+                                 └─ Network（通信）
+複数コンテナをまとめて管理 → docker-compose.yml → Compose
+```
