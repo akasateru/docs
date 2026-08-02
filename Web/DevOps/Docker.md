@@ -115,3 +115,55 @@ Windows + WSL2 環境で「Docker Desktop から見えるコンテナ」と「WS
 - **Docker Desktopを使わない場合**: WSLディストロに Docker Engine を直接インストール（`docker-ce` を apt導入等）すれば、Docker Desktopは不要になり完全に独立する。`sudo service docker start`（またはsystemd）でdaemonを起動。
   - メリット: Docker Desktopのライセンス（企業利用での有償化）を回避できる。
   - デメリット: Windows側GUIや複数ディストロ間のシームレスな共有が失われる。
+
+## 1.11. 内部アーキテクチャ（仕組みの裏側）
+
+コンテナはVMのようにハードウェアをエミュレートしているわけではなく、Linuxカーネルの機能を組み合わせて「隔離された軽量な実行環境」を作っている。カーネルはホストと共有する。
+
+### 1.11.1. 隔離を実現するカーネル機能
+
+- **Namespaces（名前空間）**: プロセスから見える「世界」を種類ごとに分離する。
+
+  | Namespace | 隔離する対象 |
+  | --- | --- |
+  | `pid` | プロセスID空間（コンテナ内ではPID 1から見える） |
+  | `net` | ネットワークインターフェース、IP、ポート |
+  | `mnt` | マウントポイント（ファイルシステムのツリー） |
+  | `uts` | ホスト名 |
+  | `ipc` | プロセス間通信（共有メモリ等） |
+  | `user` | UID/GID（コンテナ内rootをホストの非rootにマッピング可能） |
+
+- **cgroups（control groups）**: プロセスグループが使えるCPU・メモリ・I/Oに上限をかける仕組み。`docker run --memory`/`--cpus` はこれを設定しているだけ。
+
+→ namespacesで「見える範囲」を絞り、cgroupsで「使える量」を絞る、この2つがコンテナの正体。
+
+### 1.11.2. プロセスの実行経路（daemon〜実プロセス）
+
+`docker run` 実行時の内部の呼び出し順:
+
+```text
+docker CLI
+  → dockerd（Docker Engine, REST APIサーバー）
+    → containerd（コンテナのライフサイクル管理デーモン）
+      → containerd-shim（コンテナごとに1プロセス、実プロセスの親になる）
+        → runc（OCI Runtime、namespace/cgroupsを作りプロセスをexec）
+```
+
+- `dockerd` は実際にはコンテナを直接起動しておらず、`containerd` に委譲し、`containerd` がさらに `runc`（OCI仕様準拠のランタイム）を呼んで実プロセスを起動する。
+- `containerd-shim` が親プロセスとして残るため、`dockerd` を再起動してもコンテナ自体は動き続けられる（daemonlessでコンテナが生存できる設計）。
+
+### 1.11.3. イメージの正体：レイヤーとUnion Filesystem
+
+- イメージはDockerfileの各命令（`RUN`/`COPY`など）ごとに**読み取り専用のレイヤー**として保存される。
+- 複数レイヤーを重ねて1つのファイルシステムに見せるのが **OverlayFS**（現在の標準）。
+  - `lowerdir`: 既存の読み取り専用レイヤー群
+  - `upperdir`: コンテナ実行時に書き込む差分（Copy-on-Write）
+  - `merged`: 実際にコンテナから見えるマウントポイント
+- レイヤーはSHA256ハッシュで管理され、同じ内容のレイヤーは複数イメージ間で共有される（ビルドキャッシュや`docker pull`の差分取得の元）。
+- コンテナを削除すると `upperdir`（書き込み差分）だけが破棄され、イメージ本体（`lowerdir`）は変わらない。
+
+### 1.11.4. ネットワークの裏側
+
+- デフォルトの `bridge` ネットワークは、ホスト上に仮想スイッチ（Linuxブリッジ `docker0`）を作成する。
+- 各コンテナには **veth pair**（仮想イーサネットケーブルの両端）が割り当てられ、片方をコンテナのnetnsに、もう片方をブリッジに接続する。
+- `-p` のポートフォワーディングは `iptables`（NATテーブル）のルールで実現している。
