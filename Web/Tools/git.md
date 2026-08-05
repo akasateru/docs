@@ -75,6 +75,29 @@ C:\Users\（ユーザー名）\AppData\Local\Programs\Python\Python3x\Scripts
 
 ## 5. git workflows
 
+### 5.1. worktree（同一リポジトリで複数ブランチを同時に作業）
+
+通常 `git checkout`/`switch` でブランチを切り替えると作業ディレクトリは1つしか存在しないが、`git worktree` を使うと同じリポジトリに対して**複数の作業ディレクトリ**を同時に持てる。ブランチごとに別ディレクトリなので、ファイルの競合なく並行作業できる。
+
+用途:
+
+- 独立したタスクを並行して進めたいとき（レビュー待ちのPRを触らずに別機能を実装する、など）
+- 緊急のhotfixを、今の作業を止めずに別ディレクトリで対応する
+
+コマンド:
+
+| コマンド | 説明 |
+| --- | --- |
+| `git worktree add <path> <branch>` | 既存ブランチを指定パスにチェックアウトして worktree を作る |
+| `git worktree add -b <new-branch> <path> <base-branch>` | 新規ブランチを切りつつ worktree を作る |
+| `git worktree list` | 存在する worktree の一覧（パス・ブランチ・HEAD）を表示 |
+| `git worktree remove <path>` | worktree を削除（未コミットの変更があると拒否される） |
+| `git worktree remove --force <path>` | 未コミットの変更を破棄して強制削除 |
+| `git worktree prune` | ディレクトリを `rm -rf` 等で直接消した場合の管理情報を掃除 |
+| `git worktree lock <path>` / `unlock <path>` | 外部ドライブなど一時的にアクセスできない場所の worktree を誤削除から保護 |
+
+Claude Code にはこの仕組みをラップした `EnterWorktree`/`ExitWorktree` というツールがあり、セッションの作業ディレクトリごと worktree に切り替えられる。詳細は [Claude Code.md](../AI%20Integration/Claude%20Code.md) を参照。
+
 ## 6. Gitの裏側
 
 ### 6.1. git init
