@@ -134,7 +134,71 @@ Claude Code にはこの仕組みをラップした `EnterWorktree`/`ExitWorktre
 - fetch: リモートの変更をローカルに取得（.git/FETCH_HEAD に記録）
 - merge: 取得した変更を現在のブランチに取り込む
 
-## 7. 参考
+## 7. リモート操作
+
+### 7.1. git remote -v
+
+登録されているリモートリポジトリの一覧を、URL付きで表示。
+
+```bash
+git remote -v
+```
+
+```txt
+origin  https://github.com/user/repo.git (fetch)
+origin  https://github.com/user/repo.git (push)
+```
+
+- `-v` は verbose の略。無指定だとリモート名（`origin` など）のみ表示
+- fetch用・push用のURLは別々に表示される（通常は同一だが、個別設定も可能）
+
+### 7.2. git fetch -p（prune）
+
+リモートの最新情報取得と同時に、リモート側で削除済みのブランチに対応するローカルの追跡ブランチ（remote-tracking branch）を掃除する。
+
+```bash
+git fetch -p
+# git fetch --prune と同義
+```
+
+- 通常の `git fetch` はリモートで削除されたブランチの参照（例: `origin/feature-x`）をローカルに残したまま
+- `-p` を付けると、リモートに存在しなくなった参照を自動削除
+- `git branch -r` / `git branch -a` の出力が整理される
+
+### 7.3. git fetch --all
+
+登録されている**すべてのリモート**から最新情報を取得する。
+
+```bash
+git fetch --all
+```
+
+- リモートが `origin` のみの場合は通常の `git fetch` と実質同じ
+- `origin`（自分のfork）と `upstream`（元リポジトリ）など複数リモートを登録している場合に、まとめて更新できる
+- `-p` と組み合わせた `git fetch --all -p` は、全リモートに対するfetch+pruneとして実務でよく使われる
+
+## 8. forkとブランチの違い
+
+同じ「分岐」でも、branchとforkは全く別レイヤーの概念。
+
+| | ブランチ (branch) | fork |
+| --- | --- | --- |
+| スコープ | 1つのリポジトリ内 | リポジトリ全体の複製（別リポジトリ） |
+| 目的 | 並行して機能開発するため | 書き込み権限のないリポジトリへ変更を提案するため |
+| 権限 | 書き込み権限を持つメンバー向け | 誰でも作成可能（自分のコピーなので自由） |
+| Gitのネイティブ機能か | Yes（`git branch`） | No（GitHub/GitLab等ホスティングサービスの機能） |
+
+- **branch**: 同じ `.git` の中でコミット履歴を共有しつつ開発の流れを分岐させる仕組み。軽量で作成・切替が一瞬。
+- **fork**: リポジトリ自体を自分のアカウント配下に丸ごと複製する仕組み。OSSへのコントリビュートなど、元リポジトリへの直接push権限がない場合に使う。forkした自分のリポジトリでは自由にブランチを切ってpushでき、元リポジトリへの取り込みはPull Requestで依頼する。
+
+fork運用では、元リポジトリを `upstream` という名前でリモート登録し、その更新を追いかけるのが一般的（[7. リモート操作](#7-リモート操作)の `git fetch --all` 参照）。
+
+```bash
+git remote add upstream https://github.com/original-owner/project.git
+git fetch upstream
+```
+
+## 9. 参考
 
 - <https://dev.classmethod.jp/articles/introduce-pre-commit/>
 - <https://qiita.com/raki/items/5374a91dca4a3039094b>
