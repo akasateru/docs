@@ -35,12 +35,12 @@
     "editor.snippetSuggestions": "top"
   },
 
-  // 画像の保存先をプロジェクトルートの images フォルダに固定
-  "pasteImage.path": "${projectRoot}/images",
+  // 画像の保存先をノートと同じディレクトリのサブフォルダに固定 (<ノートと同じ場所>/<ノート名>/)
+  "pasteImage.path": "${currentFileDir}/${currentFileNameWithoutExt}",
   "pasteImage.showFilePathConfirmInputBox": true,
 
   "markdown.copyFiles.destination": {
-    "**/*": "${documentWorkspaceFolder}/images/"
+    "**/*": "${documentDirName}/${documentBaseName}/"
   },
 
   // Marpの設定

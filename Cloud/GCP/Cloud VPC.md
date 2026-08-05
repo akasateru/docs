@@ -10,7 +10,7 @@
 - Cloud VPN トンネルと、Cloud Interconnect 用の VLAN アタッチメントを使用して、オンプレミス ネットワークに接続
 - Google Cloud の外部ロードバランサからバックエンドにトラフィックを分散
 
-![alt text](../../images/image.png)
+![alt text](Cloud%20VPC/image.png)
 
 ### 2.1. ファイアウォール ルール
 
@@ -93,7 +93,7 @@ Cloud VPN を使用すると、安全なバーチャル プライベート ネ�
 - VPCエンドポイント
   - インターネットを経由せずGCPのサービスに接続するためのエンドポイント
 - Private Link
-  - ![alt text](../../images/image-1.png)
+  - ![alt text](Cloud%20VPC/image-1.png)
   - Customer VPC　→　Service Provider VPCに対し「一方通行」の接続が可能となる
 
 ## 8. 同一VPCで内部のみで通信させる

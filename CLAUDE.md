@@ -10,9 +10,12 @@
 - `General/`: 技術に限らない汎用ナレッジ（思考法、ビジネス、法律、面接など）。
 - `Web/`: Web開発関連の技術ノート。分野別にサブディレクトリ化（`Frontend/`・`Backend/`・`Database/`・`DevOps/`・`Network/`・`Security/`・`Auth/`・`LLM/`・`ML/`・`Testing/`・`Tools/`・`OS/`・`Format/`（XML・YAML・Markdown等のデータ記法）・`設計/`・`アルゴリズム/` など）。
 - `書籍/`: 書籍の読書メモ（ファイル名は `[書籍]書籍名.md`）。
-- `resources/`: ノートから参照する画像等の添付ファイル。
 
 新しいノートは既存の分野に最も近いディレクトリへ配置し、該当する分野がなければ `Web/` 直下に置かず新規サブディレクトリを作成する。
+
+## 画像の配置
+
+ノートから参照する画像は、ノートと同じディレクトリに「ノート名と同名のサブフォルダ」を作って格納する（例: `Cloud/GCP/Cloud VPC.md` の画像は `Cloud/GCP/Cloud VPC/` に置く）。Markdown からは相対パス（例: `![alt text](Cloud%20VPC/image.png)`）で参照する。
 
 個人的な内容（生活、趣味、健康、キャリアなど）は本リポジトリではなく `workspaces/private-docs/` に置く。
 
