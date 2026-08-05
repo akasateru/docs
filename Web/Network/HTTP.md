@@ -24,7 +24,41 @@ SOAP APIというのもあるらしい[【備忘】SOAP APIとは？REST APIと�
 - **4xx (Client Error)**: クライアント側のエラー（例: `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`）
 - **5xx (Server Error)**: サーバ側のエラー（例: `500 Internal Server Error`, `503 Service Unavailable`）
 
-### 1.2.1. 502 Bad Gateway
+### 1.2.1. ステータスコード一覧（主要なもの）
+
+| コード | 名称 | 意味 |
+| --- | --- | --- |
+| 100 | Continue | ここまでのリクエストは問題ない、続きを送ってよい |
+| 101 | Switching Protocols | プロトコル切り替え（WebSocketなど） |
+| 200 | OK | 成功 |
+| 201 | Created | リソース作成成功（POSTなど） |
+| 202 | Accepted | 受理したが処理は未完了（非同期処理） |
+| 204 | No Content | 成功だがレスポンスボディなし（DELETEなど） |
+| 301 | Moved Permanently | 恒久的な移転（SEO評価も引き継ぐ） |
+| 302 | Found | 一時的なリダイレクト |
+| 304 | Not Modified | キャッシュが有効（条件付きGETで変更なし） |
+| 307/308 | Temporary/Permanent Redirect | 302/301のメソッド維持版（POSTがPOSTのままリダイレクトされる） |
+| 400 | Bad Request | リクエストの構文・内容が不正 |
+| 401 | Unauthorized | 未認証（＝誰であるか分からない） |
+| 403 | Forbidden | 認証済みだが権限がない（＝誰か分かるが権限がない） |
+| 404 | Not Found | リソースが存在しない |
+| 405 | Method Not Allowed | 許可されていないHTTPメソッド |
+| 409 | Conflict | リソースの状態と競合（重複登録など） |
+| 422 | Unprocessable Entity | 構文は正しいが意味的に処理不能（バリデーションエラーなど） |
+| 429 | Too Many Requests | クライアント側のレート制限超過 |
+| 500 | Internal Server Error | サーバー内部の予期しないエラー |
+| 502 | Bad Gateway | プロキシ・ゲートウェイが上流から不正な応答を受けた |
+| 503 | Service Unavailable | サーバーが一時的に処理不能（メンテナンス・過負荷） |
+| 504 | Gateway Timeout | 上流サーバーからの応答がタイムアウト |
+| 529 | Overloaded（非標準） | サーバー過負荷。Anthropic APIなど一部プロバイダが独自に使用 |
+
+**実務で押さえておきたい区別**
+
+- **401 vs 403**: 401は「誰であるか分からない」、403は「誰か分かるが権限がない」
+- **429 vs 5xx系**: 429は送信頻度などクライアント側が原因、5xx系はサーバーのキャパシティ不足が原因
+- **リトライ方針**: 5xx系・429はリトライで解消することが多く、`exponential backoff`（指数関数的バックオフ）でのリトライ実装が定石。4xx系（401/403/404など）はリクエスト自体を直さない限りリトライしても解消しない
+
+### 1.2.2. 502 Bad Gateway
 
 **502 Bad Gateway**とは、サーバーがゲートウェイ・プロキシとして動作している際に、上流（バックエンド）サーバーから無効な応答を受け取ったことを示すステータスコード。
 
