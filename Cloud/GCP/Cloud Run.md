@@ -53,3 +53,30 @@ gcloud run services update-traffic SERVICE --to-revisions=NEW=10,OLD=90
 - **Feature Flag（機能フラグ）**: 「デプロイ（コードを配る）」と「リリース（機能を有効化する）」を分離する考え方。新旧コードは両方とも本番に存在し、ユーザーセグメントやランダムサンプリングでどちらの挙動を見せるか制御する（LaunchDarkly, Statsigなど）。ユーザーIDのハッシュ値で振り分けると、同一ユーザーに一貫した体験を保ちやすい。
 - **後方互換性の担保**: 新旧が同時稼働する時間帯がある以上、APIやDBスキーマは両バージョンからアクセス可能な状態を維持する必要がある。例えばDBカラム追加は「nullableで追加 → 新旧両方が書き込み対応 → 旧バージョン退役後にNOT NULL化」のような多段階マイグレーションにする。
 - **セッションアフィニティ**: 同一ユーザーが新旧を行き来すると体験が壊れやすいため、一度新バージョンに割り当てたユーザーはCookieやヘッダーで固定し、そのセッション中は同じバージョンで完走させる設計が一般的。
+
+## 5. Cloud Run Jobs
+
+- 常時稼働してリクエストを待ち受ける「サービス」とは別に、一度実行して終了するバッチ処理用のリソース
+- 実行のたびに `Execution` が作成され、その中で指定したタスク数分の `Task`（コンテナインスタンス）が並列実行される
+
+### 5.1. `gcloud run jobs describe` コマンド
+
+ジョブの設定内容（コンテナイメージ、環境変数、CPU/メモリ、タスク数、リトライ回数、タイムアウトなど）や直近の実行状況を確認するコマンド。
+
+```bash
+gcloud run jobs describe JOB_NAME --region=REGION
+```
+
+- `--region`: ジョブが存在するリージョンを指定（未指定だとデフォルト設定を参照）
+- `--format`: 出力形式（`yaml`, `json`, `value(...)` など）を指定でき、特定フィールドだけ抽出することも可能
+
+```bash
+# JSON形式で出力
+gcloud run jobs describe my-job --region=asia-northeast1 --format=json
+
+# コンテナイメージだけ抽出
+gcloud run jobs describe my-job --region=asia-northeast1 \
+  --format="value(spec.template.spec.template.spec.containers[0].image)"
+```
+
+似たコマンドに `gcloud run services describe`（サービス用）があるが、ジョブとサービスは別リソースなので混同しないよう注意する。
