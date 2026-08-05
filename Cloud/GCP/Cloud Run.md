@@ -80,3 +80,25 @@ gcloud run jobs describe my-job --region=asia-northeast1 \
 ```
 
 似たコマンドに `gcloud run services describe`（サービス用）があるが、ジョブとサービスは別リソースなので混同しないよう注意する。
+
+### 5.2. Job の YAML構造と `vpcAccess`
+
+Cloud Run Job の spec は入れ子になっており、`spec.template`（ExecutionTemplate：ジョブ実行全体のテンプレート）の中に、さらに `spec.template.spec.template`（TaskTemplate：個々のタスクのテンプレート）が存在する。
+
+```yaml
+apiVersion: run.googleapis.com/v1
+kind: Job
+spec:
+  template:              # ExecutionTemplate
+    spec:
+      template:           # TaskTemplate
+        spec:
+          containers:
+            - image: ...
+          vpcAccess:       # VPCネットワークへのアクセス設定
+            connector: projects/PROJECT_ID/locations/REGION/connectors/CONNECTOR_NAME
+            egress: ALL_TRAFFIC   # または PRIVATE_RANGES_ONLY
+```
+
+- `vpcAccess` は TaskTemplate 配下、つまり `template.template.vpcAccess` のパスに位置する（`gcloud run jobs describe --format` で特定フィールドを抽出する際もこのパス表記になる）
+- `vpcAccess` の設定内容（コネクタ / Direct VPC egress / egressの選択肢）については [Cloud VPC](Cloud%20VPC.md) を参照

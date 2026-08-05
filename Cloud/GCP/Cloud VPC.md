@@ -59,6 +59,14 @@ Compute Engine VM インスタンス、転送ルール、GKE コンテナなど�
 - **管理の複雑さ:** 接続先が増えるたびに網目のような設定が必要。
 - **セキュリティ:** ネットワーク全体が繋がってしまうため、特定のサービスだけを見せることが難しい。
 
+#### 4.2.2. 利用例：Cloud SQL のプライベートIP接続
+
+Cloud SQL の**プライベートIP接続**は、裏側でGoogleが管理する専用VPCとユーザーのVPCをVPCピアリングで繋ぐことで実現されている（`servicenetworking.googleapis.com` 経由で自動構成される）。
+
+```
+あなたのVPC ⇄（VPCピアリング）⇄ Google管理のCloud SQL用VPC ⇄ Cloud SQLインスタンス
+```
+
 ## 5. ハイブリッド クラウド
 
 ### 5.1. Cloud VPN
@@ -107,6 +115,15 @@ annotations:
 
 - 中継サーバーを置かず、Cloud Run から VPC へ**直接（Direct）**ネットワークを繋ぐ方式
 - Cloud Run インスタンスに、VPC のサブネットの IP アドレスを直接割り当て
+- 後述の VPC Access コネクタ（中継用VMが常時起動する方式）と比べて、コネクタの起動コストが不要でレイテンシも低い
+
+```yaml
+vpcAccess:
+  networkInterfaces:
+    - network: default
+      subnetwork: default
+  egress: PRIVATE_RANGES_ONLY
+```
 
 ### 8.2. Private Service Connect
 
@@ -118,6 +135,30 @@ annotations:
 1. **プロデューサー（提供者）:** サービス（例：DBやAPI）を公開する側。
 2. **コンシューマー（利用者）:** あなたの VPC。
 3. **エンドポイント:** あなたの VPC 内に「`10.0.0.5`」などのプライベート IP を作成。この IP に通信を送ると、**Google のバックボーンネットワークを経由して、相手のサービスに直接届く。**
+
+### 8.3. VPC Access コネクタ
+
+- Serverless VPC Access の従来方式。VPCネットワーク内に中継用の小さなVMインスタンス群（コネクタ）を常時起動しておき、そこを経由してサーバーレス側（Cloud Run/Cloud Functions/App Engineスタンダード）とVPC側を繋ぐ
+- Direct VPC egress と異なり、コネクタ自体の起動コストが常時発生する
+- コネクタはVPC内の専用サブネット範囲（`/28`推奨）にデプロイする
+
+```yaml
+annotations:
+  run.googleapis.com/vpc-access-connector: "projects/PROJECT_ID/locations/REGION/connectors/CONNECTOR_NAME"
+  run.googleapis.com/vpc-access-egress: "all-traffic"
+```
+
+### 8.4. egress の設定値（2択）
+
+VPC Access コネクタ・Direct VPC egress のどちらの方式でも、`egress` は以下の2択のみ。
+
+| 値 | 動作 |
+|---|---|
+| `PRIVATE_RANGES_ONLY`（デフォルト） | プライベートIPレンジ（RFC1918: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`）宛の通信のみVPC経由。インターネット向けは通常経路 |
+| `ALL_TRAFFIC` | 送信するすべてのトラフィックをVPC経由にする |
+
+- `PRIVATE_RANGES_ONLY` だけだと `*.a.run.app` 宛の通信はVPCを通らず外部経由になる点に注意（8節冒頭の注意点と同じ）
+- `ALL_TRAFFIC` は、インターネット向け送信元IPをCloud NAT経由で固定したい場合や、VPC内のファイアウォール/プロキシを全トラフィックに強制適用したい場合に使う
 
 ## 9. 参考
 
