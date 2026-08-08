@@ -64,3 +64,4 @@ class 注文処理 {
 
 - [デザインパターン](デザインパターン.md)（振る舞いに関するパターンの表にDIあり）
 - [現場で役立つシステム設計の原則](現場で役立つシステム設計の原則.md)
+- [dependency-injector](../Backend/Python/dependency-injector.md)（Python向けDIフレームワーク）
