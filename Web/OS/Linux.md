@@ -21,3 +21,40 @@ find <検索開始ディレクトリ> -maxdepth <深さ> -iname "<パターン>"
 ```bash
 find . -maxdepth 2 -iname "*.md"
 ```
+
+## 3. ps コマンド
+
+実行中のプロセス一覧を表示するコマンド。`ps aux` は最もよく使われる組み合わせ。
+
+```bash
+ps aux
+```
+
+- **`a`**: 全ユーザーのプロセスを表示（自分の端末以外も含む）
+- **`u`**: ユーザー指向のフォーマットで表示（CPU/メモリ使用率など詳細情報）
+- **`x`**: 端末に紐付いていないプロセス（デーモンなど）も表示
+
+出力例:
+
+```txt
+USER   PID  %CPU %MEM    VSZ   RSS TTY  STAT START   TIME COMMAND
+root     1   0.0  0.1  1234   567 ?    Ss   09:00   0:01 /sbin/init
+naoki  512   2.3  1.5 98765 12345 ?    S    10:30   0:15 node server.js
+```
+
+主な列の意味:
+
+- **PID**: プロセスID
+- **%CPU / %MEM**: CPU・メモリ使用率
+- **STAT**: プロセス状態（`S`=スリープ、`R`=実行中、`Z`=ゾンビ など）
+- **START**: 起動時刻
+- **COMMAND**: 実行コマンド
+
+よく使う場面:
+
+```bash
+ps aux | grep node          # 特定プロセスを検索
+ps aux --sort=-%mem | head  # メモリ使用量順（GNU版のみ。macOS標準のBSD版psは--sort非対応）
+```
+
+macOSは BSD版 `ps` のため、GNU版（Linux標準）と一部オプションの挙動が異なる点に注意。

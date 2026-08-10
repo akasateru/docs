@@ -1,3 +1,4 @@
+# git
 
 ## 1. 概要
 
@@ -198,7 +199,113 @@ git remote add upstream https://github.com/original-owner/project.git
 git fetch upstream
 ```
 
-## 9. 参考
+## 9. オブジェクト調査コマンド
+
+### 9.1. git ls-tree
+
+ツリーオブジェクト（ある時点のディレクトリ構造）の中身を、作業ディレクトリに展開せずに表示するコマンド。
+
+```bash
+git ls-tree <tree-ish> [path...]
+```
+
+```bash
+git ls-tree HEAD              # 現在のコミットのルート直下を表示
+git ls-tree HEAD src/         # 特定ディレクトリの中身を表示
+git ls-tree -r HEAD           # 再帰的に全ファイルを表示
+git ls-tree -r --name-only HEAD  # ファイルパスのみ表示
+```
+
+出力例:
+
+```txt
+100644 blob a1b2c3d4...    README.md
+040000 tree 9c8d7e6f...    src
+```
+
+各列は「モード（`100644`=通常ファイル、`040000`=ディレクトリ）」「タイプ（`blob`/`tree`/`commit`）」「SHA-1」「パス」。`ls` がファイルシステムを見るのに対し、`ls-tree` は Git オブジェクトDB内のスナップショットを見るイメージ。
+
+### 9.2. git rev-list
+
+指定条件に一致するコミットのハッシュを列挙するコマンド。`git log` の内部処理で使われる低レベルコマンドで、機械的処理・スクリプト向け。
+
+```bash
+git rev-list HEAD                    # HEADから辿れる全コミットのハッシュ
+git rev-list --count HEAD            # コミット数をカウント
+git rev-list -n 5 HEAD               # 直近5件のハッシュ
+git rev-list main..feature           # mainにはないがfeatureにはあるコミット
+git rev-list --all                   # 全ブランチ・タグから辿れる全コミット
+```
+
+`git log` はコミットメッセージや差分など人間向けの詳細情報を表示するのに対し、`git rev-list` はデフォルトでハッシュのみを出力する。`git ls-tree` が「ある1時点でのファイル構造」を見るのに対し、`git rev-list` は「コミット履歴（時間軸）の集合」を扱う点が対照的。
+
+## 10. 低レベルコマンド（plumbing）一覧
+
+`git log`・`git commit`・`git branch`・`git merge` などの「高レベルコマンド（porcelain）」は、内部でこれらの低レベルコマンド（plumbing）を組み合わせて実装されている。出力がスクリプト処理向けに安定しているのが特徴。
+
+### 10.1. オブジェクトの調査・読み取り系
+
+| コマンド | 役割 |
+| --- | --- |
+| `git cat-file` | オブジェクトの内容・タイプ・サイズを表示 |
+| `git ls-tree` | ツリーオブジェクトの中身を表示（[9.1](#91-git-ls-tree)） |
+| `git rev-list` | 到達可能なコミットの一覧を出力（[9.2](#92-git-rev-list)） |
+| `git rev-parse` | ブランチ名やタグをSHA-1ハッシュに解決 |
+| `git ls-files` | インデックス上のファイル一覧を表示 |
+| `git show-ref` | 全参照（ref）の一覧を表示 |
+| `git diff-tree` | 2つのツリー（コミット）間の差分を表示 |
+| `git diff-index` | ツリーとインデックスの差分を表示 |
+| `git diff-files` | 作業ディレクトリとインデックスの差分を表示 |
+| `git name-rev` | SHA-1からブランチ+相対位置の可読な名前を逆引き |
+| `git merge-base` | 2つのコミットの共通祖先を探す |
+
+### 10.2. オブジェクトの作成・書き込み系
+
+| コマンド | 役割 |
+| --- | --- |
+| `git hash-object` | ファイル内容からblobオブジェクトを作成しハッシュを返す |
+| `git mktree` | 標準入力からツリーオブジェクトを作成 |
+| `git commit-tree` | ツリーオブジェクトから直接コミットオブジェクトを作成 |
+| `git write-tree` | 現在のインデックスからツリーオブジェクトを作成 |
+| `git update-index` | インデックス（ステージ領域）を直接操作 |
+| `git mktag` | タグオブジェクトを作成 |
+
+### 10.3. 参照（ref）の操作系
+
+| コマンド | 役割 |
+| --- | --- |
+| `git update-ref` | ブランチなどの参照を直接更新 |
+| `git symbolic-ref` | HEADなどのシンボリック参照を操作 |
+| `git pack-refs` | 参照をパックして`.git/packed-refs`にまとめる |
+
+### 10.4. パック・リポジトリメンテナンス系
+
+| コマンド | 役割 |
+| --- | --- |
+| `git pack-objects` | オブジェクトをパックファイルにまとめる |
+| `git unpack-objects` | パックファイルを個別オブジェクトに展開 |
+| `git index-pack` | パックファイルからインデックスを作成 |
+| `git verify-pack` | パックファイルの整合性を検証 |
+| `git fsck` | オブジェクトDBの破損・孤立オブジェクトをチェック |
+| `git prune` | 到達不能なオブジェクトを削除 |
+| `git count-objects` | 未パックのオブジェクト数・サイズを表示 |
+
+公式の一覧は `git help -a` の "low-level commands" セクションでも確認できる。
+
+## 11. --quiet / -q オプション
+
+多くのgitサブコマンドに共通するオプションで、成功時の進捗表示・詳細メッセージを抑制する。エラー発生時は通常どおり表示され、終了コード（`$?`）も通常どおり返るため、成否判定には使える。CI/CDやスクリプト内でログを簡潔にしたい場合に使う。
+
+```bash
+git clone -q <url>          # クローン進捗を非表示
+git fetch -q                # フェッチの進捗表示を抑制
+git checkout -q <branch>    # "Switched to..."等を抑制
+git commit -q                # コミット後のサマリーを抑制（コミット自体は行われる）
+```
+
+コマンドによって対応状況・挙動が異なる（例: `git diff` は `-q` 非対応で代わりに `--exit-code` を使う）ので、迷ったら `git <command> -h` で確認する。完全に出力を消したい場合は `-q` に加えて標準エラー出力も `2>/dev/null` で捨てることもある。
+
+## 12. 参考
 
 - <https://dev.classmethod.jp/articles/introduce-pre-commit/>
 - <https://qiita.com/raki/items/5374a91dca4a3039094b>

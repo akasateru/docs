@@ -20,9 +20,17 @@
 
 - ripgrep, deno, Firefoxの一部, TiKV
 
+## 1.5. ロギング（tracing）
+
+- Subscriber
+  - Spanの状態を管理しつつEventを記録するイベントリスナーのような存在
+- Span
+  - ある期間を表現しログに文脈を付与する存在
+- Event
+  - 通常のログ1行に相当する存在
+
 ## 2. 参考
 
-- [tracing](Backend/Rust/Rust.md)
 - [Go](Go.md)
 - [Swift](Swift.md)
 - [Kotlin](Kotlin.md)
