@@ -1,3 +1,7 @@
+# Claude Code
+
+実践的なワークフロー・ベストプラクティスは [Claude Code ベストプラクティス.md](./Claude%20Code%20ベストプラクティス.md) を参照。
+
 ## 1. Claude Code とは
 
 Anthropic が開発したターミナル完結型の AI 開発アシスタント。コードの読み書き・実行・Git 操作などをエージェントが自律的に行う。

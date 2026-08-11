@@ -1,1 +1,0 @@
-- [Lucide](https://lucide.dev/)

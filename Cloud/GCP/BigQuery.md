@@ -1,5 +1,6 @@
+# BigQuery
 
-## 1. BigQuery
+## 1. 概要
 
  Google Cloudのペタバイト規模の費用対効果に優れたフルマネージド型の分析データ ウェアハウス([BigQuery ドキュメント](https://docs.cloud.google.com/bigquery/docs?hl=ja))
 

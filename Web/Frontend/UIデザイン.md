@@ -16,6 +16,7 @@ UIデザインは言語化できる原則が多い分野。読書だけでなく
 | [Awwwards](https://www.awwwards.com/) | 審査員選出の凝ったWebデザイン集。トレンド把握向き（プロダクトUIというより表現寄り） |
 | [Dribbble](https://dribbble.com/) / [Behance](https://www.behance.net/) | ビジュアル重視の投稿型。アイデア出しに向く |
 | [Collect UI](https://collectui.com/) | ボタン・フォームなどパーツ単位の日常UIパターン集。模写しやすい粒度 |
+| [Lucide](https://lucide.dev/) | シンプルで一貫性のあるオープンソースアイコンセット |
 
 ## 1.3. デザインガイドライン
 
