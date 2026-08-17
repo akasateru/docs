@@ -225,3 +225,14 @@ npm run build     # プロダクションビルド
 npm run start     # プロダクションサーバー起動
 npm run lint      # ESLint 実行
 ```
+
+---
+
+## 1.12. Nuxt との比較
+
+比較対象は [NuxtJS.md](NuxtJS.md)。詳細な比較表はそちらに記載。
+
+- Next.js は **React Server Components (RSC)** が中核機能で、サーバー/クライアントコンポーネントを `"use client"` で明示的に分離する設計。Nuxt（Vue）には同等の概念がなく、実験的な Islands 機能で部分対応している段階
+- デプロイの移植性は Nuxt の **Nitro** サーバーエンジンの方が高く、Node/Vercel/Cloudflare Workers/Deno/静的ホスティングにゼロコンフィグで対応する。Next.js は Vercel との親和性を前提に設計されている
+- Nuxt は自動インポート（コンポーネント・composable）とモジュールエコシステム（`nuxt.config.ts`に1行追加で機能拡張）が強力で、開発体験が軽い
+- サーバー処理をコンポーネント単位で厳密に分離したい／Vercelエコシステムを前提にするなら Next.js、デプロイ先の自由度や開発体験の軽さを重視するなら Nuxt、という使い分けになる

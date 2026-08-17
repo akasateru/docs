@@ -106,3 +106,20 @@ export NODE_OPTIONS="--max-old-space-size=4096"
 | TypeScript       | オプション | ファーストクラスサポート |
 | Composition API  | オプション | 標準                     |
 | サーバーエンジン | Express    | Nitro                    |
+
+## 10. Next.js との比較
+
+比較対象は [Next.js.md](Next.js.md)。
+
+| 観点             | Nuxt                                 | Next.js                                |
+| ---------------- | ------------------------------------ | --------------------------------------- |
+| ベースフレームワーク | Vue.js                             | React                                   |
+| サーバーエンジン | **Nitro**（Node/Vercel/Cloudflare Workers/Deno/静的ホスティングなどにゼロコンフィグでデプロイ可能） | Vercelとの親和性が高い設計。他ホストでも動くがNitroほどの抽象化はない |
+| サーバーコンポーネント | 概念自体がなく、実験的な Nuxt Server Components（Islands）で部分対応中 | **React Server Components (RSC)** が中核機能。`"use client"` でクライアント境界を明示 |
+| データ取得       | `useFetch` / `useAsyncData` composable | Server Component内で直接 `fetch`、Next独自のキャッシュ制御（`revalidate`等） |
+| 自動インポート   | コンポーネント・composable・utilsを自動インポート | 明示的な import が必要（自動インポートなし） |
+| 状態管理         | 組み込みの `useState`（SSRセーフ）   | 標準機構なし。Context APIや外部ライブラリ（Zustand等）に依存することが多い |
+| モジュール拡張   | Nuxt Modules（`nuxt.config.ts`に1行追加で機能拡張） | npmパッケージを個別に組み込む形が中心 |
+| ルーティング/API | `pages/` + `server/api/`（Nitro server routes） | `app/` 配下に `page.tsx` と `route.ts` を同居 |
+
+**使い分けの目安**: サーバー処理をコンポーネント単位で厳密に分離したい・Vercelエコシステムを活用したいなら Next.js。デプロイ先の自由度（Nitroの移植性）や自動インポート・モジュールによる開発体験の軽さを重視するなら Nuxt。
