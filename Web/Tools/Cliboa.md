@@ -22,6 +22,7 @@ CSVファイルの取得・加工、DB間のデータ連携、外部APIからの
 
 ## 参考
 
+- [ETL](../DevOps/ETL.md)（ETL/ELTの概念、他ツールとの比較）
 - [GitHub - BrainPad/cliboa](https://github.com/BrainPad/cliboa)
 - [default_etl_modules.md](https://github.com/BrainPad/cliboa/blob/master/docs/default_etl_modules.md)
 - [yaml_configuration.md](https://github.com/BrainPad/cliboa/blob/master/docs/yaml_configuration.md)
