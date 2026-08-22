@@ -285,3 +285,18 @@ window.addEventListener("load", () => {
 
 - `defer`スクリプトの実行は`DOMContentLoaded`より前に完了する
 - 一般的なDOM操作の開始は`DOMContentLoaded`を待てば十分で、`load`まで待つと画像等の読み込みが遅い場合に不必要に遅延する
+
+# 3. モジュールシステム（CommonJS / ESM）
+
+他のファイルやパッケージを読み込む仕組みには、歴史的に2つの方式が存在する。役割（他コードを読み込む）は同じだが仕組みが異なる。
+
+| | `require`（CommonJS） | `import`（ES Modules） |
+| --- | --- | --- |
+| 仕様 | Node.js独自の古い方式 | JS言語標準の方式 |
+| 書き方 | `const express = require('express')` | `import express from 'express'` |
+| 読み込みタイミング | 実行時（同期的） | 静的解析可能（ビルド時に依存関係を把握できる） |
+| 有効化条件 | `.js`（デフォルト） | `.mjs`か`package.json`に`"type": "module"`が必要 |
+
+- 今のNode.jsはどちらも使えるが、モダンなプロジェクト（Nuxt、Vite系など）は基本`import`を使う
+- Express公式サンプル等で`require`が使われているのは歴史的経緯（Expressの登場は2010年でESMより前）
+- webpack設定ファイル（`webpack.config.js`）が`require`を使っているのも同様の理由（[Webpack](#12-webpack)セクション参照）
