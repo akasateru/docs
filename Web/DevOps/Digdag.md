@@ -49,3 +49,4 @@ Treasure Data社が開発したOSSのワークフロー自動化・オーケス�
 ## 1.6. 参考
 
 - [Digdag公式ドキュメント](https://docs.digdag.io/)
+- [ETL](ETL.md)（Embulkとの組み合わせ、Airflowとの位置付け比較）
