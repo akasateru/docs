@@ -6,6 +6,7 @@ GitHub公式のCLIツール。ターミナルからブラウザを開かずにPR
 
 - **正式名称**: GitHub CLI
 - **目的**: PR作成・レビュー、Issue管理、リポジトリ操作、CI結果確認などをコマンドラインで行う
+- **インストール**: `brew install gh`（macOS）
 - **認証**: `gh auth login` でGitHubアカウントと連携すれば、以降のAPI呼び出しは自動認証される
 - [git.md](git.md) がバージョン管理（コミット・ブランチ・履歴）を担当するのに対し、`gh` はGitHubというホスティングサービス固有の機能（PR・Issue・Actions等）を扱うという住み分け
 
