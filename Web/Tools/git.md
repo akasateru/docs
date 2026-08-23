@@ -305,7 +305,23 @@ git commit -q                # コミット後のサマリーを抑制（コミ�
 
 コマンドによって対応状況・挙動が異なる（例: `git diff` は `-q` 非対応で代わりに `--exit-code` を使う）ので、迷ったら `git <command> -h` で確認する。完全に出力を消したい場合は `-q` に加えて標準エラー出力も `2>/dev/null` で捨てることもある。
 
-## 12. 参考
+## 12. タグとリリース
+
+**タグ（tag）はGitそのものの概念**であり、Bitbucket固有の概念ではない。コミットに固定の名前を付ける仕組み（`git tag`）で、SVNやMercurialなど他のバージョン管理システムにも同様の概念がある。
+
+- 実体は `refs/` 配下に保存される参照の一種（[6.1. git init](#61-git-init)、[10.3. 参照（ref）の操作系](#103-参照refの操作系)参照）。
+- ブランチと違い、タグは基本的に動かない（特定コミットへの固定ラベル）。
+- 軽量タグ（commitへの単純な参照）と注釈付きタグ（`git tag -a`、作成者・日付・メッセージ等のメタ情報を持つタグオブジェクト）の2種類がある。
+
+**Bitbucket/GitHubの「Releases」機能**は、このGitのタグ機能の上に、リリースノートや添付ファイルなどのUI・メタデータを乗せたホスティングサービス側の付加機能。「タグリリース」と言う場合は多くの場合「あるタグに紐づけてリリースを作成する」という、Bitbucket/GitHub側の運用フローを指す。
+
+```bash
+git tag v1.0.0                        # 軽量タグ
+git tag -a v1.0.0 -m "First release"  # 注釈付きタグ
+git push origin v1.0.0                # タグをリモートにpush（タグはデフォルトでpushされない）
+```
+
+## 13. 参考
 
 - <https://dev.classmethod.jp/articles/introduce-pre-commit/>
 - <https://qiita.com/raki/items/5374a91dca4a3039094b>
