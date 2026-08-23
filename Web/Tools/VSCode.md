@@ -91,7 +91,19 @@
 
 - 抽象クラスに定義ジャンプしたとき、自動で本体まで飛ぶようにしたい
 
-## 8. 参考
+## 8. 代表的な便利機能
+
+- **マルチカーソル編集**: `Cmd+D`で同じ単語を選択して一括編集、`Cmd+Option+↑/↓`で縦方向にカーソル追加
+- **コマンドパレット**: `Cmd+Shift+P`でほぼ全操作にアクセス
+- **クイックオープン**: `Cmd+P`でファイル名あいまい検索
+- **統合ターミナル**: `` Ctrl+` ``でエディタ内にターミナル表示、複数ペイン分割可
+- **Git連携**: ソース管理ビューでdiff確認・ステージ・コミットがGUIで完結
+- **Zen Mode**: `Cmd+K Z`で余計なUIを消して集中モード
+- **設定同期(Settings Sync)**: 拡張機能・キーバインド・設定をGitHubアカウント経由で複数端末に同期
+- **ワークスペース設定**: `.vscode/settings.json`でプロジェクト単位のフォーマッタ・lintルールを固定
+- **拡張機能例**: GitLens（blame/履歴の可視化）、Error Lens（エラーをインライン表示）
+
+## 9. 参考
 
 - [Markdown（マークダウン）をVSCodeの拡張機能とスニペットで効率良く書く](https://qiita.com/waicode/items/1310d3f0aeb24f393b88)
 - [VSCode(VisualStudioCode)の定番機能を一挙解説 #新人プログラマ応援 - Qiita](https://qiita.com/midiambear/items/bc0e137ed77153cb421c#vscode%E3%81%A7%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B)
