@@ -65,3 +65,33 @@ URLとコンポーネントの対応付けをJS側で行う。
 ### 3.4. コード分割（任意だが推奨）
 
 - ページが増えるとJSバンドルが肥大化するため、`React.lazy` + `Suspense` で遅延読み込みを設定するのが一般的。
+
+## 4. createElement
+
+### 4.1. JSXとの関係
+
+JSXは`React.createElement(type, props, ...children)`へのシンタックスシュガーであり、ビルド時にコンパイルされる。
+
+```jsx
+// JSX
+<div className="box">Hello</div>
+
+// コンパイル後（React.createElement呼び出し）
+React.createElement('div', { className: 'box' }, 'Hello')
+```
+
+- 第1引数 `type`: タグ名（文字列）またはコンポーネント（関数・クラス）
+- 第2引数 `props`: 属性のオブジェクト。属性がなければ`null`
+- 第3引数以降 `children`: 子要素（複数可、ネスト可）
+
+### 4.2. 新JSXランタイム
+
+React 17以降は「新JSXランタイム」が導入され、JSXは`React.createElement`ではなく`react/jsx-runtime`の`jsx`/`jsxs`関数にコンパイルされるようになった。
+
+- ファイル内で`import React from 'react'`を明示的に書かなくてもJSXが使える（バンドラ側が自動でランタイムをimportする）
+- 実行時のパフォーマンスも若干改善される（子要素が配列かどうかで`jsx`/`jsxs`を使い分けるなど）
+- 古いランタイム（`classic`）を明示的に使いたい場合はビルド設定で切り替え可能
+
+### 4.3. DOMの`document.createElement`との違い
+
+同名だが別物。`React.createElement`はReact要素（実DOMではなく仮想DOM上のオブジェクト）を作るための関数で、実際のDOM要素を生成する`document.createElement`（→[JavaScript.md](JavaScript/JavaScript.md)）とは目的もレイヤーも異なる。ReactはReact要素のツリーを元に、最終的に内部で実DOM操作（`document.createElement`相当の処理）を行っている。
