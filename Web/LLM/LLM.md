@@ -54,3 +54,5 @@ Google・Amazon・Microsoft・Metaなど大手は、以下の層でLLM推論コ�
 ## 7. 参考
 
 - [分類評価指標](../ML/分類評価指標.md)（Precision・Recall・F1スコア）
+- [機械学習とニューラルネットワークの基礎](../ML/機械学習とニューラルネットの基礎.md)
+- [秘書Agent設計](../AI%20Integration/秘書Agent設計.md)
