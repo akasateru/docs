@@ -66,9 +66,47 @@ URLとコンポーネントの対応付けをJS側で行う。
 
 - ページが増えるとJSバンドルが肥大化するため、`React.lazy` + `Suspense` で遅延読み込みを設定するのが一般的。
 
-## 4. createElement
+## 4. React Server Components（RSC）とディレクティブ
 
-### 4.1. JSXとの関係
+### 4.1. RSCの本質
+
+- 「どのサーバーで実行するか」を選ぶ機能ではなく、**コンポーネント単位でサーバー環境で実行するかクライアント環境で実行するかを宣言できる**仕組み。
+- デフォルトはServer Component。`.tsx`ファイルに何も書かなければサーバー上でレンダリングが完結し、生成物（HTML相当のペイロード）だけがブラウザに送られる。JSバンドルにも含まれない。
+- DBアクセスやAPIキーなど秘匿情報を扱う処理をサーバー側に閉じ込めつつ、クライアントに送るJSバンドルサイズを削減できるのが狙い。
+- `useState`などのReact hooksや`onClick`のようなイベントハンドラはServer Componentでは使えない（サーバー上で1回だけ実行されて終わりのため、インタラクティブな状態を持てない）。これらが必要な部分だけをClient Componentに切り出す。
+
+### 4.2. ディレクティブとは
+
+- ファイル（または関数）の**先頭に置く特別な文字列リテラル**で、コンパイラやランタイムに「このコードをどう扱うか」を指示するメタ情報。実行される命令ではなく宣言。
+- JS標準の例: `"use strict"`。エンジンがこれを読み取って厳格モードで動作する。
+- Reactのビルドツールが独自に解釈する拡張ディレクティブとして`"use client"`と`"use server"`がある。
+
+### 4.3. `use client` / `use server`
+
+```tsx
+"use client";
+
+export default function Button() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+- `"use client"`をファイル先頭に書くと、そのファイルとその依存先はクライアントバンドルに含まれ、ブラウザで実行されるClient Componentになる。
+
+```tsx
+"use server";
+
+export async function submitForm(formData: FormData) {
+  await db.insert(...);
+}
+```
+
+- `"use server"`は逆に、その関数がサーバー上でのみ実行され、クライアントから呼び出し可能なエンドポイント（Server Action）として扱われることを示す。
+
+## 5. createElement
+
+### 5.1. JSXとの関係
 
 JSXは`React.createElement(type, props, ...children)`へのシンタックスシュガーであり、ビルド時にコンパイルされる。
 
@@ -84,7 +122,7 @@ React.createElement('div', { className: 'box' }, 'Hello')
 - 第2引数 `props`: 属性のオブジェクト。属性がなければ`null`
 - 第3引数以降 `children`: 子要素（複数可、ネスト可）
 
-### 4.2. 新JSXランタイム
+### 5.2. 新JSXランタイム
 
 React 17以降は「新JSXランタイム」が導入され、JSXは`React.createElement`ではなく`react/jsx-runtime`の`jsx`/`jsxs`関数にコンパイルされるようになった。
 
@@ -92,6 +130,6 @@ React 17以降は「新JSXランタイム」が導入され、JSXは`React.creat
 - 実行時のパフォーマンスも若干改善される（子要素が配列かどうかで`jsx`/`jsxs`を使い分けるなど）
 - 古いランタイム（`classic`）を明示的に使いたい場合はビルド設定で切り替え可能
 
-### 4.3. DOMの`document.createElement`との違い
+### 5.3. DOMの`document.createElement`との違い
 
 同名だが別物。`React.createElement`はReact要素（実DOMではなく仮想DOM上のオブジェクト）を作るための関数で、実際のDOM要素を生成する`document.createElement`（→[JavaScript.md](JavaScript/JavaScript.md)）とは目的もレイヤーも異なる。ReactはReact要素のツリーを元に、最終的に内部で実DOM操作（`document.createElement`相当の処理）を行っている。
