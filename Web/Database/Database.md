@@ -766,3 +766,42 @@ FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
 - 長時間実行中のトランザクション（放置されたREPEATABLE READのスナップショットなど）があると、そのトランザクションがまだ古いバージョンを参照している可能性があるためpurgeが進まない
 - purgeが滞留するとundo log領域が肥大化し続け、ディスク使用量増加やパフォーマンス劣化につながる
 - 対処としては、長時間張り付いたトランザクション（`SHOW ENGINE INNODB STATUS`や`information_schema.innodb_trx`で確認可能）をコミット/ロールバックさせて解放することが基本
+
+## 32. 再帰クエリ（Recursive Query）と`WITH RECURSIVE`
+
+### 32.1. 何のためのものか
+
+自分自身を参照して繰り返し実行されるSQLクエリ。組織図・カテゴリツリー・部品表（BOM）など、**あらかじめ深さが分からない階層構造・グラフ構造**を1回のクエリで辿るために使う。通常のJOINは固定回数しか自己結合できないが、再帰クエリなら任意の深さまで展開できる。標準SQLでは再帰CTE（共通テーブル式）である`WITH RECURSIVE`で実装する。
+
+### 32.2. 構文と動作
+
+`非再帰項（初期値） UNION [ALL] 再帰項（自己参照）` という2部構成。
+
+```sql
+WITH RECURSIVE subordinates AS (
+  -- 非再帰項: 起点（社長）
+  SELECT id, name, manager_id, 1 AS level
+  FROM employees
+  WHERE id = 1
+
+  UNION ALL
+
+  -- 再帰項: 自分の部下を辿る（subordinatesを自己参照）
+  SELECT e.id, e.name, e.manager_id, s.level + 1
+  FROM employees e
+  JOIN subordinates s ON e.manager_id = s.id
+)
+SELECT * FROM subordinates;
+```
+
+実行の流れ:
+
+1. 非再帰項を実行し、結果を「作業テーブル」に入れる
+2. 再帰項を、直前の作業テーブルの内容だけを入力として実行
+3. 結果が空になるまで2を繰り返し、毎回の結果を積み上げていく
+
+### 32.3. 注意点
+
+- `UNION`（重複排除）より`UNION ALL`が一般的。重複チェックのコストがなく、同じ行が複数の経路で辿り着くことが構造上ない場合が多いため。
+- 循環データ（A→B→Aのような閉路）があると無限ループになる。訪問済みIDの配列（例: `path`列に`id`を積んでいく）を持たせて、既に訪れたIDに達したら停止する閉路検出を行うのが定石。
+- 対応状況: PostgreSQL・SQLite・SQL Serverなどは古くから対応。MySQLは8.0以降で対応（§3のRDB一覧も参照）。
