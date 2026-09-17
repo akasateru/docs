@@ -37,3 +37,4 @@ SPAやモバイルアプリではPKCE（Proof Key for Code Exchange）を組み�
 ## 1.6. 参考
 
 - [Auth0公式ドキュメント](https://auth0.com/docs)
+- [OAuth 2.0とOIDC](OAuth2.0とOIDC.md)（一般的な仕組み・Pythonでの実装例）

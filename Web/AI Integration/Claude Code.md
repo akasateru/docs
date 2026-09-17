@@ -328,7 +328,7 @@ Claude Codeの応答のトーン・フォーマットをカスタマイズでき
 
 ---
 
-## 15. アップデートの追い方・全体トレンド
+## 16. アップデートの追い方・全体トレンド
 
 Claude Code は頻繁にマイナーバージョンが上がる（例: 2026年8月時点で v2.1.237 前後）。個々のパッチ内容を逐一追うよりも、大まかなトレンドを把握しておく方が実用的。
 
@@ -339,11 +339,11 @@ Claude Code は頻繁にマイナーバージョンが上がる（例: 2026年8�
 
 ---
 
-## 16. コミュニティ製スキルフレームワーク: Superpowers
+## 17. コミュニティ製スキルフレームワーク: Superpowers
 
 [obra/superpowers](https://github.com/obra/superpowers)（Jesse Vincent氏, Prime Radiant）は、Claude Code 向けの**エージェント型スキルフレームワーク兼開発手法**。GitHubスター9万超で、8節のような自作スキルとは別に、コミュニティ製のプラグインとして配布・インストールする形を取る代表例。
 
-### 16.1. コンセプト
+### 17.1. コンセプト
 
 「Brainstorm → Spec → Plan → TDD → Subagent Development → Review → Finalize」という7フェーズの開発フローを強制することで、壊れにくいソフトウェア開発を目指す手法。個々のスキルが状況に応じて自動発火する。
 
@@ -353,7 +353,7 @@ Claude Code は頻繁にマイナーバージョンが上がる（例: 2026年8�
 - **test-driven-development**: RED-GREEN-REFACTOR サイクルを強制する TDD
 - **using-git-worktrees**: 新しいブランチで隔離された作業スペースを作る（13節の worktree 機能と親和性が高い）
 
-### 16.2. インストール方法
+### 17.2. インストール方法
 
 公式マーケットプレイス経由（推奨）:
 
@@ -370,6 +370,38 @@ Claude Code は頻繁にマイナーバージョンが上がる（例: 2026年8�
 
 実験的な追加スキル集は別リポジトリ [superpowers-lab](https://github.com/obra/superpowers-lab) にまとまっている。
 
-### 16.3. 導入時の所感
+### 17.3. 導入時の所感
 
 TDDやworktreeの利用をかなり厳密に強制する性格が強いフレームワークなので、既存のワークフローに合うかは要検証。いきなり全部入れるのではなく、まず1機能（例: brainstorming）だけ試してみるのが無難。
+## 18. 外部プラグイン集「Everything Claude Code（ECC）」
+
+Claude Code・Cursor・Codex など複数のAIコーディング環境で使える agents・skills・commands をまとめて配布しているOSSプラグイン集（MITライセンス）。100Kスター規模で話題になった。
+
+- リポジトリ: `github.com/affaan-m/everything-claude-code`
+- 68個の agents（プランナー・アーキテクト・コードレビュアー・セキュリティレビュアーなど役割特化のサブエージェント）
+- 286個の skills（TDD・セキュリティ審査・フロントエンド/バックエンドパターンなどオンデマンドの再利用ワークフロー）
+- 94個の commands（`/plan` `/code-review` `/build-fix` などのスラッシュコマンド）＋ rules・hooks・memory
+- 推奨フロー: 計画 → テスト → 実装 → レビュー → 検証 → 学習 → 改善
+- 導入: `/plugin marketplace add https://github.com/affaan-m/ECC` → `/plugin install ecc@ecc`
+
+### 18.1. 資料・コンテンツ作成系スキル
+
+`skills/` 配下には、12節の `/memo` のような個人ナレッジ運用とは別に、ライティング・資料作成に特化したスキルが複数含まれる。
+
+| スキル名 | 用途 |
+| --- | --- |
+| `article-writing` | ブログ・ガイド・ニュースレター等の長文コンテンツを「個性のある声」で執筆 |
+| `content-engine` | 記事・メモ・ポッドキャスト等の素材を X/LinkedIn/YouTube 等プラットフォーム別に再構成 |
+| `brand-voice` / `brand-discovery` | ブランド・個人の文体（ボイス）を定義・抽出 |
+| `investor-materials` / `investor-outreach` | 投資家向け資料の作成 |
+| `competitive-report-structure` / `competitive-platform-analysis` / `market-research` | 競合分析・市場調査レポートの構成 |
+| `frontend-slides` | スライド作成 |
+| `documentation-lookup` | ドキュメント検索・参照 |
+| `strategic-compact` | 戦略資料の要約・圧縮 |
+
+共通する思想:
+
+- **ソース資料（メモ・トランスクリプト・既存記事）から出発し、テンプレートで生成しない**
+- 1セクション／1投稿＝1つの明確な主張にする
+- 流行語的表現（「ゲームチェンジャー」等）・根拠のない誇張・エンゲージメント狙いの質問を禁止
+- 完成時に「主張が出典で裏付けられているか」をチェックする
