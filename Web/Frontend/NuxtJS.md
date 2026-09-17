@@ -31,6 +31,8 @@ export default defineNuxtConfig({
 - **SPA**: すべてクライアントで描画（`ssr: false`）
 - **Hybrid**: ページごとにSSR/SSGを混在させることも可能（Nuxt 3）
 
+各方式の仕組み（ハイドレーション等）の詳細は[レンダリング方式.md](レンダリング方式.md)を参照。
+
 ## 5. ディレクトリ構成
 
 ```text
@@ -105,7 +107,7 @@ export NODE_OPTIONS="--max-old-space-size=4096"
 | ビルドツール     | Webpack    | Vite（デフォルト）       |
 | TypeScript       | オプション | ファーストクラスサポート |
 | Composition API  | オプション | 標準                     |
-| サーバーエンジン | Express    | Nitro                    |
+| サーバーエンジン | Express    | [Nitro](../Backend/JavaScript/Nitro.md) |
 
 ## 10. Next.js との比較
 
