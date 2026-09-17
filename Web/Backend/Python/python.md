@@ -383,6 +383,32 @@ mapping: dict[str, int] = {"a": 1}
 pair: tuple[int, str] = (1, "a")
 ```
 
+### 10.1. `from __future__ import annotations`（遅延評価アノテーション）
+
+ファイル先頭に書くと、型アノテーションが**実行時には評価されず文字列として扱われる**ようになる（[PEP 563](https://peps.python.org/pep-0563/)）。
+
+```python
+from __future__ import annotations
+
+class Node:
+    def add_child(self, child: Node) -> None:  # 前方参照でもクォート不要
+        ...
+```
+
+- **前方参照が書ける**: まだ定義されていない自クラス・後で定義するクラスを、`"Node"` のようにクォートで囲まず型ヒントに書ける。
+- **循環importの回避**: `TYPE_CHECKING` ブロックで型チェック専用にimportしたクラスも、実行時に評価されないためエラーにならない。
+  ```python
+  from __future__ import annotations
+  from typing import TYPE_CHECKING
+  if TYPE_CHECKING:
+      from other_module import HeavyClass
+
+  def foo(x: HeavyClass) -> None: ...  # 実行時は評価されないのでOK
+  ```
+- **起動時のパフォーマンス向上**: 型ヒント評価のコストがかからない。
+- **注意**: `typing.get_type_hints()` など実行時に型を取得するAPIは、文字列を `eval` して解決するため挙動が変わる場合がある。
+- Python 3.7+ で利用可能。PEP 563 はいずれ標準の挙動にする計画だったが後方互換性の問題で撤回され、現在も明示的なfuture importとして使う運用が続いている。
+
 ## 11. 非同期処理（async/await）
 
 ```python
