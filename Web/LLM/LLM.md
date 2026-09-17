@@ -51,6 +51,60 @@ Google・Amazon・Microsoft・Metaなど大手は、以下の層でLLM推論コ�
 - 近年は「モデルをどう安くするか」より「電力とデータセンター用地の確保」がボトルネックになりつつある（原子力発電契約の締結など）
 - 一般企業のLLMOpsで現実的なコスト最適化レバーは、プロンプトキャッシング・タスクに応じたモデル選択（軽量モデル活用）・バッチAPI活用
 
-## 7. 参考
+## 8. エージェントループ（Agent Loop）の設計
+
+§5「エージェント型システムの分類」でいう**エージェント（Agents）**が実際にどう動いているかの内部構造。LLMが「考える→実行→観察→また考える」を自律的に繰り返す制御ループのことで、Claude Codeのようなツールもこの仕組みで動く。
+
+### 8.1. 基本構造
+
+1. **Think**: LLMがユーザーの目標を見て、次に何をすべきか考える
+2. **Act**: ツールを呼ぶ（ファイルを読む、コマンドを実行する、検索するなど）
+3. **Observe**: その結果を会話履歴に追加する
+4. ゴールに達したか判断 → まだなら1に戻る、達したら終了
+
+通常のチャット（1回聞く→1回答える→人間が次の指示を出す）との違いは、「誰がループを回しているか」。エージェントループでは人間が毎回指示を出さなくても、LLMが自分で次の一手を判断して完了まで自律的に回り続ける。
+
+### 8.2. 設計で重要なポイント
+
+- **終了条件の設計**: 無限ループにならないよう、「タスク完了」をどう判定させるか。LLM自身に判断させるか、外側でステップ数上限（`max_iterations`）を設けるか
+- **コンテキスト管理**: ループが長くなるほどコンテキストが膨らむ。古い情報を要約・圧縮して詰め直す設計が要る（エージェント設計の一番の難所）
+- **エラーハンドリング**: ツール呼び出しが失敗した時に、LLMがちゃんと「失敗した」と認識して別の手段を試せるか
+- **状態の持たせ方**: ループの各イテレーションで何を覚えておくか（全履歴 vs サマリーのみ vs 構造化メモリ）
+- **危険な操作の前の人間承認**: ファイル削除など不可逆な操作の前に承認ステップを挟む設計が多い（暴走防止）
+
+### 8.3. よくあるパターン
+
+- **ReAct**（Reasoning + Acting）: 思考と行動を交互に出力させる古典的な型
+- **Plan-and-Execute**: 最初に全体計画を立ててから各ステップを実行
+- **Reflexion系**: 失敗したら自己反省させて次の試行を改善
+
+### 8.4. 疑似コード例（コードレビューエージェント）
+
+```python
+messages = [{"role": "user", "content": "このPRのバグを直して"}]
+max_iterations = 10
+
+for i in range(max_iterations):
+    # Think + Act: LLMに次の一手を考えさせる
+    response = call_llm(messages, tools=[read_file, run_tests, edit_file])
+
+    if response.stop_reason == "end_turn":
+        break  # LLMが完了と判断 → ループ終了
+
+    # Act: ツール呼び出しを実行
+    tool_result = execute_tool(response.tool_use)
+
+    # Observe: 結果を会話履歴に追加
+    messages.append({"role": "assistant", "content": response.content})
+    messages.append({"role": "user", "content": tool_result})
+
+    # コンテキストが肥大化しないかのチェック（重要）
+    if count_tokens(messages) > THRESHOLD:
+        messages = summarize_and_compress(messages)
+```
+
+MCP統合の文脈では、上記の `execute_tool` の部分がMCPサーバー呼び出しに対応する。`tools` の定義をMCPサーバーのtool定義に差し替えるだけで同じループ構造が使える。
+
+## 9. 参考
 
 - [分類評価指標](../ML/分類評価指標.md)（Precision・Recall・F1スコア）
