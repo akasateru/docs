@@ -145,6 +145,25 @@ grep "ERROR" app.log | wc -l  # パイプで組み合わせ
 | `curl` | HTTP通信 |
 | `jq` | JSONの整形・抽出 |
 
+### 8.1. xargsの`-n`オプション
+
+`xargs` はデフォルトで受け取った引数をまとめて1回のコマンド実行に詰め込む。これが問題になるコマンドがあるため、`-n1`（1回の実行につき引数を1個だけ渡す）で制御する。
+
+代表例が `basename`。`basename` は複数引数を渡すと2番目以降を「拡張子として取り除く文字列」と誤解釈する仕様があり、意図通りに動かない。
+
+```bash
+# NG: 複数ファイルをまとめて渡すと壊れる
+echo -e "a/foo.txt\nb/bar.txt" | xargs basename
+# → foo.txt だけ表示され bar.txt が消える
+
+# OK: -n1で1個ずつ渡す
+echo -e "a/foo.txt\nb/bar.txt" | xargs -n1 basename
+# → foo.txt
+#    bar.txt
+```
+
+`find` で見つけたフルパス一覧からファイル名だけを列挙したい場面（`find . -name "*.jpg" | xargs -n1 basename`）でよく使う。同じ目的ならGNU coreutilsの `basename -a` でも複数引数を一括処理できるが、macOS標準（BSD版）は非対応のため、移植性の高い `xargs -n1 basename` の方が広く使われる。
+
 ## 9. 実行系オプション
 
 ```bash
