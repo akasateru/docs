@@ -114,6 +114,32 @@ DOM 要素や子コンポーネントのインスタンスに直接アクセス�
 
 巨大なデータ（地図データや統計データなど）を扱う際、中身を深く監視しない `shallowRef` を使うとメモリ消費を抑えられる。
 
+### 1.8. `ref` と `reactive` の使い分け
+
+Composition API でリアクティブな状態を作る2つの基本API。
+
+| | `ref` | `reactive` |
+| --- | --- | --- |
+| 対象 | 何でも（プリミティブ含む） | オブジェクト/配列のみ |
+| アクセス | `.value` が必要（テンプレート内は自動アンラップされ不要） | 直接プロパティアクセス |
+| 内部実装 | `{ value: ... }` の1プロパティオブジェクトのget/setを追跡 | オブジェクト全体をProxyでラップして追跡 |
+| 分割代入 | そのまま分割してもリアクティブ性は保たれる | 直接分割するとリアクティブ性が切れる |
+| 再代入 | `count.value = newObj` で丸ごと差し替え可 | `state = {...}` の再代入は不可（参照が変わるため） |
+
+```js
+const count = ref(0)
+count.value++
+
+const state = reactive({ count: 0 })
+state.count++
+
+// reactiveの分割代入の罠
+const { count } = state          // ← ただの数値コピーになりリアクティブ性喪失
+const { count } = toRefs(state)  // ← toRefsを使えばrefとして安全に分割できる
+```
+
+Composable（§3）から値を返す際は、呼び出し側で分割代入しても壊れない `ref` の方が好まれる傾向がある。
+
 ## 2. エコシステム
 
 | ツール         | 役割                                                     |
@@ -123,6 +149,54 @@ DOM 要素や子コンポーネントのインスタンスに直接アクセス�
 | **Pinia**      | アプリ全体の状態を管理するストア                         |
 | **Nuxt.js**    | Vue ベースのフルスタックフレームワーク。SSR を容易に実現 |
 
-## 3. 参考
+## 3. Composable
+
+`use〇〇` という名前の関数として書かれる、状態を持つロジックの再利用単位。React のカスタムフックに相当する。
+
+- 「Composable」は英語の動詞 `compose`（組み立てる）に「〜できる」を意味する接尾辞 `-able` を付けた形容詞（＝「合成可能な」）が、そのまま名詞的に使われている。
+- `ref`/`reactive` による状態とライフサイクルフックなどをまとめて関数化し、複数コンポーネントで使い回せるようにする。Options API時代の `mixins` が抱えていた「プロパティの出所が分かりにくい」「名前衝突」といった問題を解決する目的で導入された。
+- Composable同士を内部で呼び出して組み合わせ（compose）、より大きなComposableを作れる。
+
+```js
+// composables/useMouse.js
+import { ref, onMounted, onUnmounted } from 'vue'
+
+export function useMouse() {
+  const x = ref(0)
+  const y = ref(0)
+
+  function update(e) {
+    x.value = e.pageX
+    y.value = e.pageY
+  }
+
+  onMounted(() => window.addEventListener('mousemove', update))
+  onUnmounted(() => window.removeEventListener('mousemove', update))
+
+  return { x, y }
+}
+```
+
+```vue
+<script setup>
+import { useMouse } from './composables/useMouse'
+const { x, y } = useMouse()
+</script>
+```
+
+Vue Router の `useRoute()`、Pinia の `useStore()` なども実体はComposable。
+
+### 3.1. クラスとの違い
+
+「実体（状態）を持つ」という点ではクラスのインスタンスに近いが、実装としては `class`/`new`/継承を使わない**クロージャベースの合成**である点が本質的に異なる。
+
+| | クラス | Composable |
+| --- | --- | --- |
+| 生成方法 | `new ClassName()` | `useXxx()` を呼ぶ |
+| 状態の保持 | インスタンスのフィールド | クロージャ内の `ref`/`reactive` |
+| 継承 | あり（`extends`） | なし。他のComposableを内部で呼んで合成する |
+| 対象 | 汎用的なオブジェクトモデリング | リアクティブな状態＋副作用ロジックの再利用に特化 |
+
+## 4. 参考
 
 - [VueのSuspenseが便利だったのでまとめてみた](https://zenn.dev/comm_vue_nuxt/articles/f7fa5cf725a05f)

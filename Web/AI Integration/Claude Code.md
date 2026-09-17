@@ -319,3 +319,89 @@ CLAUDE.md や Skills が「知識・手順」を持たせる仕組みなのに�
 | 決まった時刻・周期でクラウド上のジョブとして動かしたい | `schedule`                   |
 | 会話から得た知識を個人wikiに残したい                 | `/memo`（独自コマンド）      |
 | Claude 自身の記憶（ユーザー像・過去の指示）を整理したい | `consolidate-memory`         |
+
+---
+
+## 15. 出力スタイル（Output Style）
+
+Claude Codeの応答のトーン・フォーマットをカスタマイズできる機能。デフォルトの「エンジニア向け簡潔スタイル」以外に、独自のsystem prompt的な振る舞い（より説明的にする、特定のペルソナにするなど）を定義して切り替えられる。CLAUDE.md（4節）がプロジェクト固有の知識・規約を注入する仕組みなのに対し、Output Styleは応答スタイルそのものを差し替える仕組みという違いがある。
+
+---
+
+## 16. アップデートの追い方・全体トレンド
+
+Claude Code は頻繁にマイナーバージョンが上がる（例: 2026年8月時点で v2.1.237 前後）。個々のパッチ内容を逐一追うよりも、大まかなトレンドを把握しておく方が実用的。
+
+- 直近の傾向は「派手な新機能」より **信頼性・権限まわり・アクセシビリティの地道な改善**（サンドボックス強化、Windowsパス対応、worktree分離、バックグラウンドタスクの安定性など）。安定した開発インフラとしての成熟が優先されている
+- 出力スタイルの追加（例: 前置き・実況を省いて結果から先に示す「Concise」スタイル）など、UXの細かいチューニングも継続的に入る
+- **セッション間連携**: 同じマシン上の別セッションを `@セッション名` でメンションして連携させる機能がある（`SendMessage`/`ListAgents` に相当）。複数ターミナルで並行作業しているときに、セッションをまたいで指示や情報共有ができる
+- 最新情報のソースとしては公式ドキュメント（[code.claude.com/docs](https://code.claude.com/docs/ja/overview)）の他、リリースノート集約サイト（releasebot.io等）やコミュニティブログが早い
+
+---
+
+## 17. コミュニティ製スキルフレームワーク: Superpowers
+
+[obra/superpowers](https://github.com/obra/superpowers)（Jesse Vincent氏, Prime Radiant）は、Claude Code 向けの**エージェント型スキルフレームワーク兼開発手法**。GitHubスター9万超で、8節のような自作スキルとは別に、コミュニティ製のプラグインとして配布・インストールする形を取る代表例。
+
+### 17.1. コンセプト
+
+「Brainstorm → Spec → Plan → TDD → Subagent Development → Review → Finalize」という7フェーズの開発フローを強制することで、壊れにくいソフトウェア開発を目指す手法。個々のスキルが状況に応じて自動発火する。
+
+主な構成スキル:
+
+- **brainstorming**: コーディング前にアイデアを練り上げる
+- **test-driven-development**: RED-GREEN-REFACTOR サイクルを強制する TDD
+- **using-git-worktrees**: 新しいブランチで隔離された作業スペースを作る（13節の worktree 機能と親和性が高い）
+
+### 17.2. インストール方法
+
+公式マーケットプレイス経由（推奨）:
+
+```bash
+/plugin install superpowers@claude-plugins-official
+```
+
+作者本人のマーケットプレイス経由:
+
+```bash
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+実験的な追加スキル集は別リポジトリ [superpowers-lab](https://github.com/obra/superpowers-lab) にまとまっている。
+
+### 17.3. 導入時の所感
+
+TDDやworktreeの利用をかなり厳密に強制する性格が強いフレームワークなので、既存のワークフローに合うかは要検証。いきなり全部入れるのではなく、まず1機能（例: brainstorming）だけ試してみるのが無難。
+## 18. 外部プラグイン集「Everything Claude Code（ECC）」
+
+Claude Code・Cursor・Codex など複数のAIコーディング環境で使える agents・skills・commands をまとめて配布しているOSSプラグイン集（MITライセンス）。100Kスター規模で話題になった。
+
+- リポジトリ: `github.com/affaan-m/everything-claude-code`
+- 68個の agents（プランナー・アーキテクト・コードレビュアー・セキュリティレビュアーなど役割特化のサブエージェント）
+- 286個の skills（TDD・セキュリティ審査・フロントエンド/バックエンドパターンなどオンデマンドの再利用ワークフロー）
+- 94個の commands（`/plan` `/code-review` `/build-fix` などのスラッシュコマンド）＋ rules・hooks・memory
+- 推奨フロー: 計画 → テスト → 実装 → レビュー → 検証 → 学習 → 改善
+- 導入: `/plugin marketplace add https://github.com/affaan-m/ECC` → `/plugin install ecc@ecc`
+
+### 18.1. 資料・コンテンツ作成系スキル
+
+`skills/` 配下には、12節の `/memo` のような個人ナレッジ運用とは別に、ライティング・資料作成に特化したスキルが複数含まれる。
+
+| スキル名 | 用途 |
+| --- | --- |
+| `article-writing` | ブログ・ガイド・ニュースレター等の長文コンテンツを「個性のある声」で執筆 |
+| `content-engine` | 記事・メモ・ポッドキャスト等の素材を X/LinkedIn/YouTube 等プラットフォーム別に再構成 |
+| `brand-voice` / `brand-discovery` | ブランド・個人の文体（ボイス）を定義・抽出 |
+| `investor-materials` / `investor-outreach` | 投資家向け資料の作成 |
+| `competitive-report-structure` / `competitive-platform-analysis` / `market-research` | 競合分析・市場調査レポートの構成 |
+| `frontend-slides` | スライド作成 |
+| `documentation-lookup` | ドキュメント検索・参照 |
+| `strategic-compact` | 戦略資料の要約・圧縮 |
+
+共通する思想:
+
+- **ソース資料（メモ・トランスクリプト・既存記事）から出発し、テンプレートで生成しない**
+- 1セクション／1投稿＝1つの明確な主張にする
+- 流行語的表現（「ゲームチェンジャー」等）・根拠のない誇張・エンゲージメント狙いの質問を禁止
+- 完成時に「主張が出典で裏付けられているか」をチェックする
