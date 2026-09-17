@@ -23,6 +23,10 @@ RAG（Retrieval-Augmented Generation：検索拡張生成）は、大規模言�
 - **Embeddingモデル:** テキストをベクトルに変換するモデル。
 - **LLM:** 生成を担当するモデル（例: GPT-4, Claude, Llama）
 
+#### 1.3.1. Embeddingモデルの例
+
+- **text-multilingual-embedding-002:** Google Cloud Vertex AIが提供する多言語対応のテキスト埋め込みモデル。100以上の言語のテキストをベクトル化でき、意味検索・クラスタリング・RAGの検索部分などに使われる。英語専用の`text-embedding-*`シリーズに対して、多言語コーパスを扱う用途向けのモデル。
+
 ## 2. 仕組み
 
 - **検索 (Retrieval):** ユーザーの質問に関連する情報をデータベースから抽出。
