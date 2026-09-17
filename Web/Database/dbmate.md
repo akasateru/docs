@@ -35,3 +35,7 @@ DROP TABLE users;
 
 dbmateを動かすには、環境変数または .env ファイルに接続情報を書く。
 `DATABASE_URL="postgres://user:pass@localhost:5432/dbname?sslmode=disable"`
+
+## 5. 関連
+
+Pythonでは、SQLAlchemyと組み合わせた[Alembic.md](Alembic.md)というマイグレーションツールもよく使われる。dbmateは生SQL・言語非依存、AlembicはPythonコードでの記述・ORMとの自動同期（autogenerate）が特徴で、思想が異なる。
