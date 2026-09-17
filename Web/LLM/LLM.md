@@ -199,4 +199,6 @@ ACPも同様に、特定の店・特定の金額に紐づいた単発利用ト�
 ## 11. 参考
 
 - [分類評価指標](../ML/分類評価指標.md)（Precision・Recall・F1スコア）
+- [機械学習とニューラルネットワークの基礎](../ML/機械学習とニューラルネットの基礎.md)
+- [秘書Agent設計](../AI%20Integration/秘書Agent設計.md)
 - [Announcing Agent Payments Protocol (AP2) | Google Cloud Blog](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol)
