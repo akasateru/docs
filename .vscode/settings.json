@@ -1,15 +1,9 @@
 {
-  // 保存「前」に 1) フォーマット → 2) 段落番号 の順で実行（Run on Save: pucelle）
+  // 保存「前」にフォーマットを実行（Run on Save: pucelle）
   "runOnSave.commands": [
     {
       "globMatch": "**/*.md",
       "commandBeforeSaving": "editor.action.formatDocument",
-      "runIn": "vscode",
-      "async": false
-    },
-    {
-      "globMatch": "**/*.md",
-      "commandBeforeSaving": "markdown.extension.toc.addSecNumbers",
       "runIn": "vscode",
       "async": false
     }
