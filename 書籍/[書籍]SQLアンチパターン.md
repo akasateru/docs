@@ -44,4 +44,4 @@ CREATE TABLE BugsProducts (
 
 外部キー名をテーブルごとに意味のある名前で揃えておくと、[JOIN句のUSING構文](../Web/Database/Database.md)がそのまま使えて結合が書きやすくなるという副次的なメリットもある。
 
-キーの種類全般（候補キー・自然キー・ユニークキーなど）は[Database.md §10](../Web/Database/Database.md)を参照。
+キーの種類全般（候補キー・自然キー・ユニークキーなど）は[Database.md §6](../Web/Database/Database.md)を参照。

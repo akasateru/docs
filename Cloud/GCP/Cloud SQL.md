@@ -31,7 +31,7 @@ Read Poolを使わず、個別に作成した読み取りレプリカは、そ�
 gcloud sql instances promote-replica REPLICA_INSTANCE_NAME
 ```
 
-で個別に選んでプライマリへ昇格させることができる。ただし非同期複製である点は変わらないため、昇格時にレプリケーション遅延分のデータロスが起きうる（[Database §17 RPOとRTO](../../Web/Database/Database.md)参照）のと、HAのように自動では実行されず手動操作である点に注意。
+で個別に選んでプライマリへ昇格させることができる。ただし非同期複製である点は変わらないため、昇格時にレプリケーション遅延分のデータロスが起きうる（[Database §30 RPOとRTO](../../Web/Database/Database.md)参照）のと、HAのように自動では実行されず手動操作である点に注意。
 
 ## 4. まとめ: 目的ごとの機能の使い分け
 
