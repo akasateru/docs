@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>表紙</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 72px 88px; background: {{ground}}; color: #FFFFFF; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div style="font-size: 20px; font-weight: 700; letter-spacing: 0.08em; color: #5EEAD4">書籍紹介</div>
+<div style="width: 96px; height: 6px; background: #5EEAD4"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 28px">
+<h1 style="margin: 0; font-size: 88px; line-height: 1.15; font-weight: 900">ソフトウェア<br>アーキテクチャ・<br>ハードパーツ</h1>
+<div style="font-size: 26px; line-height: 1.6; font-weight: 500; color: #E2E8F0; max-width: 880px">分散アーキテクチャに唯一の正解はない。あらゆる決定が<strong style="color: #5EEAD4">トレードオフ</strong>であるという前提から、その分析手法を体系化した一冊。</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 18px; line-height: 1.6; color: #CBD5E1">
+<div>Neal Ford / Mark Richards / Pramod Sadalage / Zhamak Dehghani 著（オライリー・ジャパン、2022）</div>
+<div>原題: Software Architecture: The Hard Parts</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ground":{"editor":"color","default":"#14213D","options":["#14213D","#0F172A","#1E293B"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { ground: this.props.ground ?? '#14213D' };
+}
+}
+</script>
+</body>
+</html>

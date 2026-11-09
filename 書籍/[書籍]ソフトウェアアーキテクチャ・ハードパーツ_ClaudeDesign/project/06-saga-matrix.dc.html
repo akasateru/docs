@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>動的結合の8パターン</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 48px 72px 36px; background: #FFFFFF; color: #14213D; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 18px; font-weight: 700; color: {{accent}}; letter-spacing: 0.04em">第2章 表2-1 ／ 第12章へつながる</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900">3つの次元の組み合わせで、8つのサーガが決まる</h1>
+</div>
+<div style="display: flex; flex-direction: column; border: 2px solid #CBD5E1; border-radius: 12px; overflow: hidden; font-size: 19px">
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; background: #14213D; color: #FFFFFF; font-weight: 700; padding: 10px 20px">
+<div>パターン名（コード）</div><div>通信</div><div>整合性</div><div>調整</div><div>結合度</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #FFFFFF">
+<div>エピックサーガ（sao）</div><div>同期</div><div>アトミック</div><div>オーケストレーション</div><div style="font-weight: 900">とても高い</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #F1F5F9">
+<div>伝言ゲームサーガ（sac）</div><div>同期</div><div>アトミック</div><div>コレオグラフィ</div><div style="font-weight: 900">高い</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #FFFFFF">
+<div>おとぎ話サーガ（seo）</div><div>同期</div><div>結果整合性</div><div>オーケストレーション</div><div style="font-weight: 900">高い</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #F1F5F9">
+<div>タイムトラベルサーガ（sec）</div><div>同期</div><div>結果整合性</div><div>コレオグラフィ</div><div style="font-weight: 900">中程度</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #FFFFFF">
+<div>ファンタジーサーガ（aao）</div><div>非同期</div><div>アトミック</div><div>オーケストレーション</div><div style="font-weight: 900">高い</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #F1F5F9">
+<div>ホラーストーリーサーガ（aac）</div><div>非同期</div><div>アトミック</div><div>コレオグラフィ</div><div style="font-weight: 900">中程度</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #FFFFFF">
+<div>パラレルサーガ（aeo）</div><div>非同期</div><div>結果整合性</div><div>オーケストレーション</div><div style="font-weight: 900">低い</div>
+</div>
+<div style="display: grid; grid-template-columns: 2.2fr 1fr 1.1fr 1.7fr 1.1fr; padding: 9px 20px; background: #F1F5F9">
+<div>アンソロジーサーガ（aec）</div><div>非同期</div><div>結果整合性</div><div>コレオグラフィ</div><div style="font-weight: 900">とても低い</div>
+</div>
+</div>
+<div style="font-size: 18px; line-height: 1.6; color: #334155">コードは各次元の頭文字（通信 s/a、整合性 a/e、調整 o/c）。個別のトレードオフを学んだうえで、第12章で全体を統合する。</div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #5B6475"><span>ソフトウェアアーキテクチャ・ハードパーツ</span><span>06</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0F766E","options":["#0F766E","#1D4ED8","#B45309"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0F766E' };
+}
+}
+</script>
+</body>
+</html>

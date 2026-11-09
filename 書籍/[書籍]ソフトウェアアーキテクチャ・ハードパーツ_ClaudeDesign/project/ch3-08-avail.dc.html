@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>可用性・耐障害性</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 48px 72px 36px; background: #FFFFFF; color: #14213D; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 18px; font-weight: 700; color: {{accent}}; letter-spacing: 0.04em">3.1.5　可用性・耐障害性　｜　第3章</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900">障害を一部に閉じ込める。ただし同期依存があれば成り立たない</h1>
+</div>
+<div style="background: #14213D; color: #FFFFFF; border-radius: 12px; padding: 22px 32px; font-size: 23px; line-height: 1.6; font-weight: 500">耐障害性とは、システムの一部が故障しても、<span style="color: #5EEAD4; font-weight: 900">他の部分が応答性と可用性を保つ能力</span>。たとえば決済処理が落ちても、商品の検索や注文は続けられる。</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; flex-grow: 1">
+<div style="background: #F1F5F9; border-radius: 12px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 21px; font-weight: 900; color: #B45309">モノリスは弱い</div>
+<div style="font-size: 18px; line-height: 1.65">全体を複数インスタンスで負荷分散すれば多少は軽減できるが、コストがかかり、効果も限定的。バグが原因なら、全インスタンスに同じバグがあり、まとめて落ちうる。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 21px; font-weight: 900; color: {{accent}}">分割で障害を隔離する</div>
+<div style="font-size: 18px; line-height: 1.65">ドメイン単位・機能単位の耐障害性にはモジュール化が不可欠。システムを複数のデプロイメントユニットに分ければ、壊滅的な障害をそのユニットだけに隔離できる。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 21px; font-weight: 900; color: #B45309">注意点：同期依存</div>
+<div style="font-size: 18px; line-height: 1.65">障害を起こしたサービスに他が同期的に依存していると、耐障害性は実現できない。分散システムでサービス間の<strong>非同期通信</strong>が欠かせない理由の1つ。</div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #5B6475"><span>ソフトウェアアーキテクチャ・ハードパーツ</span><span>14</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0F766E","options":["#0F766E","#1D4ED8","#B45309"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0F766E' };
+}
+}
+</script>
+</body>
+</html>

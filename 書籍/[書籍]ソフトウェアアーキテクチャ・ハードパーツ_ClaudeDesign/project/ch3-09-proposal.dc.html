@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Sysops Squad 根拠づくり</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 48px 72px 36px; background: #FFFFFF; color: #14213D; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 18px; font-weight: 700; color: {{accent}}; letter-spacing: 0.04em">3.2　Sysops Squadサーガ：提案書の作成　｜　第3章</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900">現場の問題を、モジュール化の推進要因に結びつける</h1>
+</div>
+<div style="display: flex; flex-direction: column; border: 2px solid #CBD5E1; border-radius: 12px; overflow: hidden; font-size: 18px; flex-grow: 1">
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.8fr; background: #14213D; color: #FFFFFF; font-weight: 700; padding: 10px 22px; gap: 20px"><div>直面している問題</div><div>推進要因</div><div>分解で期待できること</div></div>
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.8fr; padding: 14px 22px; gap: 20px; background: #FFFFFF; line-height: 1.55">
+<div>システムが使えない時間帯がある。チケットの消失や配信の問題もあり、顧客が解約する。</div>
+<div style="font-weight: 900; color: {{accent}}">耐障害性<br>可用性</div>
+<div>落とし続けているのは核のチケット機能ではなく、アンケートやレポート機能。別サービスに分ければ、核の機能は影響を受けない。</div>
+</div>
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.8fr; padding: 14px 22px; gap: 20px; background: #F1F5F9; line-height: 1.55">
+<div>25人以上が同時にチケットを作ると、またチケット作成中にレポートを作るとフリーズする。</div>
+<div style="font-weight: 900; color: {{accent}}">スケーラビリティ<br>弾力性</div>
+<div>スケールとDB負荷の両方に問題がある。アプリだけでなくDBも分割すれば、レポートを独立させ、チケット機能に追加のスケールを与えられる。</div>
+</div>
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.8fr; padding: 14px 22px; gap: 20px; background: #FFFFFF; line-height: 1.55">
+<div>変更に時間がかかり、直しても新たな不具合が出る。</div>
+<div style="font-weight: 900; color: {{accent}}">アジリティ<br>（保守性・テスト性・デプロイ性）</div>
+<div>少ない儀式でより頻繁にデプロイでき、バグの数も大幅に減らせる。</div>
+</div>
+</div>
+<div style="font-size: 17px; line-height: 1.6; color: #334155">障害の原因分析は、開発チームが実際のデータで確認していた。根拠はデータで示す。</div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #5B6475"><span>ソフトウェアアーキテクチャ・ハードパーツ</span><span>15</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0F766E","options":["#0F766E","#1D4ED8","#B45309"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0F766E' };
+}
+}
+</script>
+</body>
+</html>

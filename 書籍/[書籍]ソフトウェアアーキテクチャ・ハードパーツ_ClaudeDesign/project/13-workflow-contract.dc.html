@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>第11-13章 ワークフローとコントラクト</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 48px 72px 36px; background: #FFFFFF; color: #14213D; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 18px; font-weight: 700; color: {{accent}}; letter-spacing: 0.04em">第II部 ・ 第11章 ワークフロー ／ 第12章 サーガ ／ 第13章 コントラクト</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900">調整の方式と、契約の厳しさをどう選ぶか</h1>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+<div style="background: #F1F5F9; border-radius: 12px; padding: 20px 26px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 22px; font-weight: 900; color: {{accent}}">オーケストレーション</div>
+<div style="font-size: 18px; line-height: 1.6">司令塔が呼び出し順序を一元管理する。流れを追いやすい一方、司令塔への結合が強まり、単一障害点にもなりやすい。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 20px 26px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 22px; font-weight: 900; color: #B45309">コレオグラフィ</div>
+<div style="font-size: 18px; line-height: 1.6">各サービスがイベントで自律的に連携する。疎結合でスケールしやすい一方、全体像を把握しにくく、監視とデバッグが難しい。</div>
+</div>
+</div>
+<div style="background: #14213D; color: #FFFFFF; border-radius: 12px; padding: 16px 28px; font-size: 19px; line-height: 1.6; font-weight: 500"><span style="color: #5EEAD4; font-weight: 900">サーガ</span>：分散環境ではACIDが使えないため、通信・整合性・調整の軸で分類した8パターンから選ぶ。失敗時は前段を打ち消す<span style="color: #5EEAD4; font-weight: 900">補償トランザクション</span>が必須になる。</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; flex-grow: 1">
+<div style="border: 2px solid #CBD5E1; border-radius: 12px; padding: 18px 26px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 21px; font-weight: 900">厳格なコントラクト vs 緩いコントラクト</div>
+<div style="font-size: 18px; line-height: 1.6"><strong>厳格</strong>（gRPCなど）：型安全だが、変更時に両サービスの同時デプロイが必要になりやすい。<br><strong>緩い</strong>（JSONなど）：柔軟だが、違反が実行時まで見つからない。マイクロサービスでは緩い契約が好まれる。</div>
+</div>
+<div style="border: 2px solid #CBD5E1; border-radius: 12px; padding: 18px 26px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 21px; font-weight: 900">スタンプ結合に注意</div>
+<div style="font-size: 18px; line-height: 1.6">一部のフィールドしか使わないのに、大きなオブジェクトを丸ごと渡す契約。緩い契約でも結合は強まり、帯域も無駄になる。各ステップには必要なデータだけを渡す。</div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #5B6475"><span>ソフトウェアアーキテクチャ・ハードパーツ</span><span>24</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0F766E","options":["#0F766E","#1D4ED8","#B45309"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0F766E' };
+}
+}
+</script>
+</body>
+</html>

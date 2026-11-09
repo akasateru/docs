@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>第5章 分解パターン</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 720px; box-sizing: border-box; padding: 48px 72px 36px; background: #FFFFFF; color: #14213D; font-family: 'Noto Sans JP', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 18px; font-weight: 700; color: {{accent}}; letter-spacing: 0.04em">第I部 ・ 第4章 分解 ／ 第5章 コンポーネントベース分解パターン</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.3; font-weight: 900">モノリスは6つのパターンで段階的にサービスへ</h1>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">1. 特定とサイズ調整</div>
+<div style="font-size: 17px; line-height: 1.55">既存の構造を洗い出し、大きすぎれば分割、小さすぎれば統合する。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">2. 共通コンポーネントの収集</div>
+<div style="font-size: 17px; line-height: 1.55">重複しているドメインロジックを1つの共通コンポーネントに集約する。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">3. フラット化</div>
+<div style="font-size: 17px; line-height: 1.55">入れ子のサブパッケージをほどき、まとまりをトップレベルの境界にする。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">4. 依存関係の判断</div>
+<div style="font-size: 17px; line-height: 1.55">依存を可視化し、循環依存や過度な結合がサービス化の妨げにならないか見る。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">5. ドメインの作成</div>
+<div style="font-size: 17px; line-height: 1.55">関連性の高い複数のコンポーネントを、将来のサービス境界の候補にまとめる。</div>
+</div>
+<div style="background: #F1F5F9; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 20px; font-weight: 900; color: {{accent}}">6. ドメインサービスの作成</div>
+<div style="font-size: 17px; line-height: 1.55">ドメインを独立したサービスに変換する、分解の最終ステップ。</div>
+</div>
+</div>
+<div style="font-size: 18px; line-height: 1.6; color: #334155">各パターンに適応度関数を設定し（行数の上限、循環依存の禁止、旧モノリスへの逆流の検知など）、分解後の構造が劣化するのを防ぐ。</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; flex-grow: 1">
+<div style="border: 2px solid {{accent}}; border-radius: 12px; padding: 18px 24px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 21px; font-weight: 900">コンポーネントベース分解（推奨）</div>
+<div style="font-size: 18px; line-height: 1.6">指標を手がかりに、問題のある部分から段階的に切り出す。</div>
+</div>
+<div style="border: 2px solid #B45309; border-radius: 12px; padding: 18px 24px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 21px; font-weight: 900">戦術的フォーク（最終手段）</div>
+<div style="font-size: 18px; line-height: 1.6">モノリスを丸ごと複製して削る。初速は速いが、重複コードを個別に保守するコストが長期的に増える。</div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #5B6475"><span>ソフトウェアアーキテクチャ・ハードパーツ</span><span>19</span></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#0F766E","options":["#0F766E","#1D4ED8","#B45309"]},"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#0F766E' };
+}
+}
+</script>
+</body>
+</html>
